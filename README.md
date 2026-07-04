@@ -1,5 +1,6 @@
 # 🏫 Website Trường Tiểu học Mỹ Cẩm
-**Xã Càng Long, Huyện Càng Long, Tỉnh Vĩnh Long**
+**Xã Mỹ Cẩm, Huyện Càng Long, Tỉnh Trà Vinh**
+
 
 ---
 
