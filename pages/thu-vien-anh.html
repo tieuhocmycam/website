@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thư Viện Ảnh Hoạt Động – Trường Tiểu học Mỹ Cẩm</title>
+  <meta name="description" content="Album ảnh hoạt động học tập, sự kiện ngoại khóa của Trường Tiểu học Mỹ Cẩm, xã Càng Long, tỉnh Vĩnh Long." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: linear-gradient(135deg, #6c5ce7 0%, var(--primary) 70%, #00cec9 100%);
+      padding: 52px 0 40px; color: var(--white);
+    }
+    .page-hero .breadcrumb { display:flex; align-items:center; gap:8px; font-size:.82rem; color:rgba(255,255,255,.7); margin-bottom:14px; }
+    .page-hero .breadcrumb a { color:rgba(255,255,255,.7); } .page-hero .breadcrumb a:hover { color:var(--white); }
+    .page-hero .breadcrumb i { font-size:.65rem; }
+    .page-hero h1 { font-family:'Nunito',sans-serif; font-size:2.2rem; font-weight:800; margin-bottom:8px; }
+    .page-hero p { font-size:1rem; color:rgba(255,255,255,.85); }
+
+    /* ── GALLERY FILTER ── */
+    .gallery-filter {
+      background:var(--white); border-radius:16px; padding:24px 28px;
+      box-shadow:0 4px 20px rgba(0,0,0,.08); margin:-28px auto 36px;
+      position:relative; z-index:10; border:1px solid var(--border);
+    }
+    .filter-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+    .filter-tab { padding:8px 20px; border-radius:50px; font-size:.85rem; font-weight:700; border:1.5px solid var(--border); color:var(--text-muted); cursor:pointer; transition:.3s; }
+    .filter-tab.active, .filter-tab:hover { background:var(--primary); color:var(--white); border-color:var(--primary); }
+    
+    .filter-bar-bottom { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+    .filter-bar-bottom select {
+      padding:8px 16px; border:1.5px solid var(--border); border-radius:50px;
+      font-size:.85rem; color:var(--text); background:var(--white); cursor:pointer;
+    }
+    .photo-count { font-size:.85rem; color:var(--text-muted); }
+
+    /* ── GALLERY GRID (Masonry effect) ── */
+    .gallery-grid {
+      display:grid; grid-template-columns:repeat(4, 1fr); gap:16px;
+      grid-auto-rows: 200px;
+    }
+    .gallery-item {
+      position:relative; border-radius:14px; overflow:hidden; cursor:pointer;
+      box-shadow:0 2px 8px rgba(0,0,0,.05); transition:.3s cubic-bezier(.4,0,.2,1);
+    }
+    .gallery-item:hover { transform:scale(1.02); box-shadow:0 12px 30px rgba(0,0,0,.15); z-index:2; }
+    
+    /* Masonry style items sizes */
+    .g-large { grid-column: span 2; grid-row: span 2; }
+    .g-tall  { grid-row: span 2; }
+    .g-wide  { grid-column: span 2; }
+
+    /* Beautiful Gradients for Photo Placeholders */
+    .grad-1  { background: linear-gradient(135deg, #ff7675, #6c5ce7); }
+    .grad-2  { background: linear-gradient(135deg, #74b9ff, #0984e3); }
+    .grad-3  { background: linear-gradient(135deg, #55efc4, #00b894); }
+    .grad-4  { background: linear-gradient(135deg, #ffeaa7, #fdcb6e); }
+    .grad-5  { background: linear-gradient(135deg, #a29bfe, #6c5ce7); }
+    .grad-6  { background: linear-gradient(135deg, #fab1a0, #e17055); }
+    .grad-7  { background: linear-gradient(135deg, #fd79a8, #e84393); }
+    .grad-8  { background: linear-gradient(135deg, #ffeaa7, #e17055); }
+    .grad-9  { background: linear-gradient(135deg, #00cec9, #0984e3); }
+    .grad-10 { background: linear-gradient(135deg, #6c5ce7, #d63031); }
+
+    .gallery-placeholder {
+      width:100%; height:100%; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; color:rgba(255,255,255,.9); gap:12px;
+    }
+    .gallery-placeholder i { font-size:2.4rem; opacity:.7; }
+    .gallery-placeholder span { font-family:'Nunito'; font-weight:800; font-size:.9rem; text-align:center; padding:0 12px; }
+
+    .gallery-overlay {
+      position:absolute; inset:0; background:rgba(26,111,181,.82);
+      display:flex; flex-direction:column; justify-content:flex-end;
+      padding:20px; opacity:0; transition:.3s ease;
+    }
+    .gallery-item:hover .gallery-overlay { opacity:1; }
+    .gallery-overlay h4 { font-family:'Nunito'; color:var(--white); font-size:.95rem; font-weight:800; margin-bottom:4px; }
+    .gallery-overlay .cat-label { font-size:.75rem; color:var(--secondary); font-weight:700; text-transform:uppercase; display:flex; align-items:center; gap:5px; }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display:none; position:fixed; inset:0; background:rgba(0,0,0,.92); z-index:9999;
+      align-items:center; justify-content:center; flex-direction:column;
+      backdrop-filter:blur(8px); animation:fadeIn .3s;
+    }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .lightbox-close { position:absolute; top:24px; right:24px; color:var(--white); font-size:2rem; cursor:pointer; opacity:.7; transition:.3s; }
+    .lightbox-close:hover { opacity:1; }
+    .lightbox-prev, .lightbox-next { position:absolute; top:50%; transform:translateY(-50%); color:var(--white); font-size:2.2rem; cursor:pointer; opacity:.6; transition:.3s; padding:20px; }
+    .lightbox-prev { left:20px; }
+    .lightbox-next { right:20px; }
+    .lightbox-prev:hover, .lightbox-next:hover { opacity:1; }
+    .lightbox-img-wrap { width:80vw; max-width:800px; height:50vh; border-radius:18px; margin-bottom:20px; overflow:hidden; }
+    .lightbox-title { color:var(--white); font-family:'Nunito'; font-size:1.2rem; font-weight:800; text-align:center; margin-bottom:6px; }
+    .lightbox-album { color:var(--secondary); font-size:.85rem; font-weight:700; text-transform:uppercase; }
+    .lightbox-count { color:rgba(255,255,255,.5); font-size:.8rem; margin-top:8px; }
+
+    /* ── ALBUM SECTION ── */
+    .albums-section { margin-top:60px; }
+    .albums-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; }
+    .album-card {
+      background:var(--white); border-radius:14px; overflow:hidden; border:1px solid var(--border);
+      box-shadow:0 2px 8px rgba(0,0,0,.06); transition:.3s;
+    }
+    .album-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); }
+    .album-card__cover { height:180px; position:relative; overflow:hidden; }
+    .album-card__cover .grad-cover { width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.3); font-size:3rem; }
+    .album-card__badge { position:absolute; top:12px; right:12px; background:var(--primary); color:var(--white); padding:4px 12px; border-radius:50px; font-size:.75rem; font-weight:700; }
+    .album-card__body { padding:20px; }
+    .album-card__body h4 { font-family:'Nunito'; font-size:1.05rem; font-weight:800; margin-bottom:6px; }
+    .album-card__body p { font-size:.82rem; color:var(--text-muted); margin-bottom:14px; }
+    .album-card__footer { display:flex; justify-content:space-between; align-items:center; }
+    .album-card__footer span { font-size:.78rem; font-weight:600; color:var(--primary); }
+
+    /* ── UPLOAD LOCK BANNER ── */
+    .upload-lock-banner {
+      background:#f8f9fa; border:2px dashed var(--border); border-radius:14px;
+      padding:24px; text-align:center; display:flex; align-items:center; justify-content:center;
+      flex-direction:column; gap:12px; margin-top:60px;
+    }
+    .upload-lock-banner i { font-size:2rem; color:var(--text-muted); }
+    .upload-lock-banner p { font-size:.85rem; color:var(--text-muted); font-weight:500; }
+
+    @media(max-width:1024px) {
+      .gallery-grid { grid-template-columns:repeat(3, 1fr); }
+      .albums-grid { grid-template-columns:repeat(2, 1fr); }
+      .g-large, .g-wide { grid-column: auto; grid-row: auto; }
+    }
+    @media(max-width:768px) {
+      .gallery-grid { grid-template-columns:repeat(2, 1fr); }
+      .albums-grid { grid-template-columns:1fr; }
+      .page-hero h1 { font-size:1.7rem; }
+    }
+    @media(max-width:480px) {
+      .gallery-grid { grid-template-columns:1fr; grid-auto-rows:180px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="container top-bar__inner">
+      <div class="top-bar__left">
+        <span><i class="fas fa-phone-alt"></i> (0235) 123 456</span>
+        <span><i class="fas fa-envelope"></i> thmycam@vinhlongedu.vn</span>
+      </div>
+      <div class="top-bar__right">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="../index.html" class="header__logo">
+        <div class="logo-icon"><i class="fas fa-school"></i></div>
+        <div class="logo-text">
+          <span class="logo-title">Tiểu học Mỹ Cẩm</span>
+          <span class="logo-sub">Xã Càng Long · Tỉnh Vĩnh Long</span>
+        </div>
+      </a>
+      <div class="header__actions">
+        <a href="login.html" class="btn-login" id="loginBtn"><i class="fas fa-lock"></i> Đăng nhập</a>
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <ul class="nav-list" id="navList">
+        <li><a href="../index.html">Trang chủ</a></li>
+        <li class="has-dropdown"><a href="gioi-thieu.html">Giới thiệu <i class="fas fa-chevron-down"></i></a>
+          <ul class="dropdown">
+            <li><a href="gioi-thieu.html#lich-su"><i class="fas fa-landmark"></i> Lịch sử & Truyền thống</a></li>
+            <li><a href="gioi-thieu.html#ban-giam-hieu"><i class="fas fa-user-tie"></i> Ban giám hiệu</a></li>
+            <li><a href="gioi-thieu.html#doi-ngu"><i class="fas fa-chalkboard-teacher"></i> Đội ngũ giáo viên</a></li>
+            <li><a href="gioi-thieu.html#co-so-vat-chat"><i class="fas fa-building"></i> Cơ sở vật chất</a></li>
+          </ul>
+        </li>
+        <li><a href="tin-tuc.html">Tin tức & Sự kiện</a></li>
+        <li><a href="kho-tai-lieu.html">Kho Tài liệu</a></li>
+        <li><a href="tuyen-sinh.html">Tuyển sinh</a></li>
+        <li><a href="thu-vien-anh.html" class="active">Thư viện ảnh</a></li>
+        <li><a href="lien-he.html">Liên hệ</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Trang chủ</a><i class="fas fa-chevron-right"></i><span>Thư viện ảnh</span>
+      </div>
+      <h1><i class="fas fa-images"></i> Thư Viện Ảnh Hoạt ĐỘng</h1>
+      <p>Những khoảnh khắc học tập, vui chơi và trải nghiệm đáng nhớ của học sinh</p>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="section" style="background:var(--bg);">
+    <div class="container">
+      
+      <!-- Filter Bar -->
+      <div class="gallery-filter fade-up">
+        <div class="filter-tabs">
+          <div class="filter-tab active" data-filter="all">Tất cả</div>
+          <div class="filter-tab" data-filter="khaigiang">Lễ khai giảng</div>
+          <div class="filter-tab" data-filter="hoatdong">Hoạt động Đoàn - Đội</div>
+          <div class="filter-tab" data-filter="hoctap">Giờ học thú vị</div>
+          <div class="filter-tab" data-filter="ngoaikhoa">Trải nghiệm ngoại khoá</div>
+        </div>
+        <div class="filter-bar-bottom">
+          <select id="galleryYear">
+            <option>Năm học 2025–2026</option>
+            <option>Năm học 2024–2025</option>
+          </select>
+          <span class="photo-count">Đang hiển thị <strong id="visibleCount">12</strong> ảnh</span>
+        </div>
+      </div>
+
+      <!-- Gallery Grid -->
+      <div class="gallery-grid" id="galleryGrid">
+        
+        <div class="gallery-item g-large fade-up" data-album="khaigiang" data-title="Lễ Khai Giảng năm học mới rực rỡ" data-gradient="grad-1">
+          <div class="gallery-placeholder grad-1">
+            <i class="fas fa-flag"></i>
+            <span>Lễ Khai Giảng 2025</span>
+          </div>
+          <div class="gallery-overlay">
+            <h4>Lễ Khai Giảng năm học mới rực rỡ</h4>
+            <span class="cat-label"><i class="fas fa-landmark"></i> Lễ khai giảng</span>
+          </div>
+        </div>
+
+        <div class="gallery-item fade-up" data-album="hoatdong" data-title="Đêm nhạc chào mừng 20/11 đầy xúc động" data-gradient="grad-2">
+          <div class="gallery-placeholder grad-2">
+            <i class="fas fa-music"></i>
+            <span>Đêm nhạc 20/11</span>
+          </div>
+          <div class="gallery-overlay">
+            <h4>Đêm nhạc chào mừng 20/11</h4>
+            <span class="cat-label"><i class="fas fa-star"></i> Hoạt động Đội</span>
+          </div>
+        </div>
+
+        <div class="gallery-item fade-up" data-album="hoctap" data-title="Tiết học STEM đầy sáng tạo của các bé" data-gradient="grad-3">
+          <div class="gallery-placeholder grad-3">
+            <i class="fas fa-flask"></i>
+            <span>Tiết học STEM Lớp 3</span>
+          </div>
+          <div class="gallery-overlay">
+            <h4>Tiết học STEM sáng tạo</h4>
+            <span class="cat-label"><i class="fas fa-book-open"></i> Giờ học thú vị</span>
+          </div>
+        </div>
+
+        <div class="gallery-item g-tall fade-up" data-album="ngoaikhoa" data-title="Hoạt động chăm sóc vườn hoa trường" data-gradient="grad-4">
+          <div class="gallery-placeholder grad-4">
+            <i class="fas fa-seedling"></i>
+            <span>Chăm sóc vườn hoa</span>
+          </div>
+          <div class="gallery-overlay">
+            <h4>Học sinh chăm sóc vườn hoa trường</h4>
+            <span class="cat-label"><i class="fas fa-leaf"></i> Trải nghiệm ngoại khoá</span>
+          </div>
+        </div>
+
+        <div class="gallery-item g-wide fade-up" data-album="hoatdong" data-title="Hội khoẻ phù đổng: Cổ vũ kéo co" data-gradient="grad-5">
+          <div class="gallery-placeholder grad-5">
+            <i class="fas fa-trophy"></i>
+            <span>Thi Kéo co</span>
+          </div>
+          <div class="gallery-overlay">
+            <h4>Cổ vũ kéo co sôi động</h4>
+            <span class="cat-label"><i class="fas fa-star"></i> Hoạt động Đội</span>
+          </div>
+        </div>
+
+        <div class="gallery-item fade-up" data-album="hoctap" data-title="Các em thảo luận nhóm môn Tiếng Việt" data-gradient="grad-6">
+          <div class="gallery-placeholder grad-6">
+            <i class="fas fa-comments"></i>
+            <span>Thảo luận nhóm</span>
+          </div>
+          <div class="gallery-overlay">
+            <h4>Thảo luận nhóm sôi nổi</h4>
+            <span class="cat-label"><i class="fas fa-book-open"></i> Giờ học thú vị</span>
+          </div>
+        </div>
+
+        <div class="gallery-item fade-up" data-album="ngoaikhoa" data-title="Tham quan bảo tàng lịch sử tỉnh" data-gradient="grad-7">
+          <div class="gallery-placeholder grad-7">
+            <i class="fas fa-bus"></i>
+            <span>Tham quan Bảo tàng</span>
+          </div>
+          <div class="gallery-overlay">
+            <h4>Chuyến đi tham quan bổ ích</h4>
+            <span class="cat-label"><i class="fas fa-leaf"></i> Trải nghiệm ngoại khoá</span>
+          </div>
+        </div>
+
+        <div class="gallery-item fade-up" data-album="khaigiang" data-title="Học sinh lớp 1 vui mừng ngày tựu trường" data-gradient="grad-8">
+          <div class="gallery-placeholder grad-8">
+            <i class="fas fa-smile"></i>
+            <span>Đón học sinh lớp 1</span>
+          </div>
+          <div class="gallery-overlay">
+            <h4>Đón học sinh lớp 1 tựu trường</h4>
+            <span class="cat-label"><i class="fas fa-landmark"></i> Lễ khai giảng</span>
+          </div>
+        </div>
+
+        <div class="gallery-item fade-up" data-album="hoctap" data-title="Thực hành Tin học trong phòng máy tính" data-gradient="grad-9">
+          <div class="gallery-placeholder grad-9">
+            <i class="fas fa-desktop"></i>
+            <span>Thực hành Tin học</span>
+          </div>
+          <div class="gallery-overlay">
+            <h4>Giờ thực hành máy tính</h4>
+            <span class="cat-label"><i class="fas fa-book-open"></i> Giờ học thú vị</span>
+          </div>
+        </div>
+
+        <div class="gallery-item fade-up" data-album="ngoaikhoa" data-title="Ngày hội đọc sách tại thư viện xanh ngoài trời" data-gradient="grad-10">
+          <div class="gallery-placeholder grad-10">
+            <i class="fas fa-book"></i>
+            <span>Ngày hội Đọc sách</span>
+          </div>
+          <div class="gallery-overlay">
+            <h4>Ngày hội đọc sách thú vị</h4>
+            <span class="cat-label"><i class="fas fa-leaf"></i> Trải nghiệm ngoại khoá</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Albums nổi bật -->
+      <section class="albums-section">
+        <div class="section-header">
+          <span class="section-tag">Bộ sưu tập</span>
+          <h2 class="section-title">Các Album Ảnh Nổi Bật</h2>
+          <p class="section-sub">Những album ảnh tổng hợp các cột mốc ý nghĩa lớn của nhà trường</p>
+        </div>
+        <div class="albums-grid">
+          
+          <div class="album-card">
+            <div class="album-card__cover">
+              <div class="grad-cover grad-1"><i class="fas fa-images"></i></div>
+              <span class="album-card__badge">15 ảnh</span>
+            </div>
+            <div class="album-card__body">
+              <h4>Album Khai Giảng Năm Học 2025–2026</h4>
+              <p>Tổng hợp những tấm hình hân hoan rực rỡ nhất trong ngày hội toàn dân đưa trẻ đến trường ngày 5/9/2025.</p>
+              <div class="album-card__footer">
+                <span>Năm học: 2025-2026</span>
+                <button class="btn btn--outline-dark" style="padding:6px 16px; font-size:.8rem;">Xem album</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="album-card">
+            <div class="album-card__cover">
+              <div class="grad-cover grad-5"><i class="fas fa-images"></i></div>
+              <span class="album-card__badge">24 ảnh</span>
+            </div>
+            <div class="album-card__body">
+              <h4>Hội Khoẻ Phù Đổng Trường 2025</h4>
+              <p>Ghi lại tinh thần thể dục thể thao rèn luyện sức khoẻ tuyệt vời của học sinh các khối qua cuộc thi chạy, kéo co, bóng đá.</p>
+              <div class="album-card__footer">
+                <span>Năm học: 2024-2025</span>
+                <button class="btn btn--outline-dark" style="padding:6px 16px; font-size:.8rem;">Xem album</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="album-card">
+            <div class="album-card__cover">
+              <div class="grad-cover grad-7"><i class="fas fa-images"></i></div>
+              <span class="album-card__badge">32 ảnh</span>
+            </div>
+            <div class="album-card__body">
+              <h4>Ngày Hội Đổi Mới Sáng Tạo STEM</h4>
+              <p>Những sản phẩm tái chế, mô hình khoa học độc đáo và tràn đầy trí tưởng tượng do chính tay các bé trường thực hiện.</p>
+              <div class="album-card__footer">
+                <span>Năm học: 2024-2025</span>
+                <button class="btn btn--outline-dark" style="padding:6px 16px; font-size:.8rem;">Xem album</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Đăng nhập để upload -->
+      <div class="upload-lock-banner">
+        <i class="fas fa-lock"></i>
+        <p>Giáo viên chủ nhiệm & Giáo viên tổng phụ trách: Đăng nhập tài khoản trường để đăng tải ảnh hoạt động lên.</p>
+        <a href="login.html" class="btn btn--primary" style="padding:8px 24px; font-size:.85rem;"><i class="fas fa-sign-in-alt"></i> Đăng nhập hệ thống</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- LIGHTBOX CONTAINER -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-close" id="lightboxClose"><i class="fas fa-times"></i></div>
+    <div class="lightbox-prev" id="lightboxPrev"><i class="fas fa-chevron-left"></i></div>
+    <div class="lightbox-next" id="lightboxNext"><i class="fas fa-chevron-right"></i></div>
+    
+    <div class="lightbox-img-wrap" id="lightboxImgWrap">
+      <!-- Sẽ được set class gradient và icon động dựa trên item được chọn -->
+      <div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#fff; font-size:5rem;" id="lightboxPlaceholder">
+        <i class="fas fa-image"></i>
+      </div>
+    </div>
+    
+    <h3 class="lightbox-title" id="lightboxTitle">Tên ảnh</h3>
+    <span class="lightbox-album" id="lightboxAlbum">Album</span>
+    <span class="lightbox-count" id="lightboxCount">1 / 10</span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer" style="padding:36px 0 0;">
+    <div class="container footer__grid" style="grid-template-columns:1.4fr 1fr 1fr;padding-bottom:28px;">
+      <div class="footer__col footer__col--brand">
+        <div class="footer-logo"><i class="fas fa-school"></i><div><strong>Tiểu học Mỹ Cẩm</strong><small>Xã Càng Long – Tỉnh Vĩnh Long</small></div></div>
+        <p>Nơi ươm mầm những ước mơ và nuôi dưỡng thế hệ tương lai của vùng đất Vĩnh Long.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Thông tin trường</h4>
+        <ul>
+          <li><i class="fas fa-map-marker-alt"></i> Xã Càng Long, Huyện Càng Long, Tỉnh Vĩnh Long</li>
+          <li><i class="fas fa-phone-alt"></i> (0235) 123 456</li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Liên kết nhanh</h4>
+        <ul>
+          <li><a href="../index.html">Trang chủ</a></li>
+          <li><a href="tin-tuc.html">Tin tức</a></li>
+          <li><a href="tuyen-sinh.html">Tuyển sinh</a></li>
+          <li><a href="lien-he.html">Liên hệ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">
+        <p>© 2025 Trường Tiểu học Mỹ Cẩm – Xã Càng Long, Tỉnh Vĩnh Long</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // Tab filter interaction
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    const visibleCount = document.getElementById('visibleCount');
+
+    function updateCount() {
+      const activeCount = Array.from(galleryItems).filter(item => item.style.display !== 'none').length;
+      visibleCount.textContent = activeCount;
+    }
+
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const filterVal = tab.dataset.filter;
+
+        galleryItems.forEach(item => {
+          if (filterVal === 'all' || item.dataset.album === filterVal) {
+            item.style.display = '';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+        updateCount();
+      });
+    });
+
+    // Initial count update
+    updateCount();
+
+    // Lightbox Logic
+    const lightbox = document.getElementById('lightbox');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    const lightboxPlaceholder = document.getElementById('lightboxPlaceholder');
+    const lightboxTitle = document.getElementById('lightboxTitle');
+    const lightboxAlbum = document.getElementById('lightboxAlbum');
+    const lightboxCount = document.getElementById('lightboxCount');
+
+    let visibleItemsArray = [];
+    let currentIdx = 0;
+
+    function openLightbox(idx) {
+      visibleItemsArray = Array.from(galleryItems).filter(item => item.style.display !== 'none');
+      currentIdx = idx;
+      updateLightboxContent();
+      lightbox.style.display = 'flex';
+    }
+
+    function updateLightboxContent() {
+      const targetItem = visibleItemsArray[currentIdx];
+      const gradClass = targetItem.dataset.gradient;
+      const title = targetItem.dataset.title;
+      const album = targetItem.dataset.album;
+      const innerIcon = targetItem.querySelector('.gallery-placeholder i').className;
+
+      // Update background gradient & icon
+      lightboxPlaceholder.className = `gallery-placeholder ${gradClass}`;
+      lightboxPlaceholder.innerHTML = `<i class="${innerIcon}"></i><span>${title}</span>`;
+
+      lightboxTitle.textContent = title;
+      lightboxAlbum.textContent = `Album: ${album.toUpperCase()}`;
+      lightboxCount.textContent = `${currentIdx + 1} / ${visibleItemsArray.length}`;
+    }
+
+    // Attach click events to visible gallery items
+    galleryItems.forEach((item) => {
+      item.addEventListener('click', () => {
+        visibleItemsArray = Array.from(galleryItems).filter(i => i.style.display !== 'none');
+        const idx = visibleItemsArray.indexOf(item);
+        openLightbox(idx);
+      });
+    });
+
+    lightboxClose.addEventListener('click', () => lightbox.style.display = 'none');
+    lightboxPrev.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currentIdx = (currentIdx - 1 + visibleItemsArray.length) % visibleItemsArray.length;
+      updateLightboxContent();
+    });
+    lightboxNext.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currentIdx = (currentIdx + 1) % visibleItemsArray.length;
+      updateLightboxContent();
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (lightbox.style.display === 'flex') {
+        if (e.key === 'Escape') lightbox.style.display = 'none';
+        if (e.key === 'ArrowLeft') {
+          currentIdx = (currentIdx - 1 + visibleItemsArray.length) % visibleItemsArray.length;
+          updateLightboxContent();
+        }
+        if (e.key === 'ArrowRight') {
+          currentIdx = (currentIdx + 1) % visibleItemsArray.length;
+          updateLightboxContent();
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tin Tức & Sự Kiện – Trường Tiểu học Mỹ Cẩm</title>
+  <meta name="description" content="Cập nhật tin tức, thông báo và các hoạt động mới nhất của Trường Tiểu học Mỹ Cẩm, xã Càng Long, tỉnh Vĩnh Long." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/admin-actions.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script>
+    // Kiểm tra đăng nhập admin ngay khi trang bắt đầu tải
+    document.addEventListener('DOMContentLoaded', function() {
+      if (localStorage.getItem('isAdminLoggedIn') === 'true') {
+        const loginBtn = document.getElementById('loginBtn');
+        if (loginBtn) {
+          loginBtn.innerHTML = '<i class="fas fa-user-cog"></i> Admin Panel';
+          loginBtn.setAttribute('href', 'admin.html');
+          
+          // Thêm nút đăng xuất
+          const parent = loginBtn.parentElement;
+          if (parent && !document.getElementById('adminLogoutBtn')) {
+            const logoutBtn = document.createElement('a');
+            logoutBtn.id = 'adminLogoutBtn';
+            logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+            logoutBtn.className = 'btn-login';
+            logoutBtn.style.background = '#e53935';
+            logoutBtn.style.padding = '9px 12px';
+            logoutBtn.style.marginLeft = '8px';
+            logoutBtn.setAttribute('href', 'javascript:void(0)');
+            logoutBtn.addEventListener('click', function() {
+              if (confirm('Bạn có muốn đăng xuất tài khoản Admin không?')) {
+                localStorage.removeItem('isAdminLoggedIn');
+                window.location.reload();
+              }
+            });
+            parent.appendChild(logoutBtn);
+          }
+        }
+      }
+    });
+  </script>
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, #1e8bc3 100%);
+      padding: 52px 0 40px; color: var(--white);
+    }
+    .page-hero .breadcrumb { display:flex; align-items:center; gap:8px; font-size:.82rem; color:rgba(255,255,255,.7); margin-bottom:14px; }
+    .page-hero .breadcrumb a { color:rgba(255,255,255,.7); } .page-hero .breadcrumb a:hover { color:var(--white); }
+    .page-hero .breadcrumb i { font-size:.65rem; }
+    .page-hero h1 { font-family:'Nunito',sans-serif; font-size:2.2rem; font-weight:800; margin-bottom:8px; }
+    .page-hero p { font-size:1rem; color:rgba(255,255,255,.85); }
+
+    /* ── FILTER BAR ── */
+    .news-filter-bar {
+      background:var(--white); border-radius:16px; padding:24px 28px;
+      box-shadow:0 4px 20px rgba(0,0,0,.08); margin:-28px auto 36px;
+      position:relative; z-index:10; border:1px solid var(--border);
+    }
+    .news-filter-bar .filter-row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .news-filter-bar select, .news-filter-bar input[type=text] {
+      padding:10px 16px; border:1.5px solid var(--border); border-radius:50px;
+      font-size:.88rem; color:var(--text); background:var(--white); font-family:'Inter';
+      transition:.3s; flex:1; min-width:160px;
+    }
+    .news-filter-bar select:focus, .news-filter-bar input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(26,111,181,.12); }
+    .cat-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+    .cat-tab { padding:8px 20px; border-radius:50px; font-size:.85rem; font-weight:700; border:1.5px solid var(--border); color:var(--text-muted); cursor:pointer; transition:.3s; }
+    .cat-tab.active, .cat-tab:hover { background:var(--primary); color:var(--white); border-color:var(--primary); }
+    .result-count { font-size:.85rem; color:var(--text-muted); margin-top:12px; }
+    .result-count strong { color:var(--primary); }
+
+    /* ── NEWS LAYOUT ── */
+    .news-page-layout { display:grid; grid-template-columns:1fr 320px; gap:36px; align-items:start; }
+
+    /* ── ARTICLE CARDS ── */
+    .article-list { display:flex; flex-direction:column; gap:24px; }
+    .article-card {
+      background:var(--white); border-radius:14px; overflow:hidden;
+      display:flex; gap:0; border:1px solid var(--border);
+      box-shadow:0 2px 8px rgba(0,0,0,.06); transition:.3s;
+    }
+    .article-card:hover { box-shadow:0 8px 24px rgba(26,111,181,.12); transform:translateY(-3px); }
+    .article-card.featured { flex-direction:column; }
+    .article-card__img { position:relative; flex-shrink:0; }
+    .article-card.featured .article-card__img { height:280px; }
+    .article-card:not(.featured) .article-card__img { width:220px; height:160px; }
+    .article-card__img .img-placeholder { height:100%; }
+    .cat-badge {
+      position:absolute; top:12px; left:12px;
+      padding:4px 12px; border-radius:50px; font-size:.75rem; font-weight:800;
+      text-transform:uppercase; letter-spacing:.05em;
+    }
+    .cat-badge--thongbao { background:#fff0ee; color:#e53935; }
+    .cat-badge--hoatdong { background:#e8f4fd; color:var(--primary); }
+    .cat-badge--hoctap   { background:#eafaf1; color:var(--accent-dark); }
+    .cat-badge--ketqua   { background:#fff9e6; color:var(--secondary-dark); }
+    .article-card__body { padding:22px 24px; flex:1; display:flex; flex-direction:column; }
+    .article-meta { display:flex; align-items:center; gap:14px; font-size:.78rem; color:var(--text-muted); margin-bottom:10px; flex-wrap:wrap; }
+    .article-meta span { display:flex; align-items:center; gap:5px; }
+    .article-card__body h2 { font-family:'Nunito',sans-serif; font-size:1.15rem; font-weight:800; line-height:1.4; margin-bottom:10px; }
+    .article-card__body h2 a:hover { color:var(--primary); }
+    .article-card__body p { font-size:.88rem; color:var(--text-muted); line-height:1.7; flex:1; margin-bottom:16px; }
+    .article-footer { display:flex; align-items:center; justify-content:space-between; }
+    .read-more-btn { display:inline-flex; align-items:center; gap:7px; color:var(--primary); font-size:.87rem; font-weight:700; transition:.3s; }
+    .read-more-btn:hover { gap:11px; }
+    .share-btn { display:flex; align-items:center; gap:8px; }
+    .share-btn a { width:30px; height:30px; border-radius:8px; background:var(--bg); color:var(--text-muted); display:flex; align-items:center; justify-content:center; font-size:.8rem; transition:.3s; }
+    .share-btn a:hover { background:var(--primary); color:var(--white); }
+
+    /* ── PAGINATION ── */
+    .pagination { display:flex; justify-content:center; align-items:center; gap:6px; margin-top:36px; }
+    .page-btn {
+      width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+      font-size:.88rem; font-weight:700; border:1.5px solid var(--border); color:var(--text-muted);
+      cursor:pointer; transition:.3s;
+    }
+    .page-btn.active, .page-btn:hover { background:var(--primary); color:var(--white); border-color:var(--primary); }
+    .page-btn.dots { border:none; cursor:default; }
+    .page-btn.dots:hover { background:transparent; color:var(--text-muted); }
+
+    /* ── SIDEBAR ── */
+    .news-sidebar-col { display:flex; flex-direction:column; gap:24px; position:sticky; top:120px; }
+    .widget { background:var(--white); border-radius:14px; border:1px solid var(--border); overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+    .widget__title { padding:14px 18px; font-family:'Nunito',sans-serif; font-weight:800; font-size:.95rem; background:var(--primary); color:var(--white); display:flex; align-items:center; gap:9px; }
+    .widget__body { padding:16px 18px; }
+
+    /* Popular posts */
+    .popular-list { display:flex; flex-direction:column; gap:14px; }
+    .popular-item { display:flex; gap:12px; align-items:flex-start; }
+    .popular-item__num { width:28px; height:28px; border-radius:8px; background:var(--primary-light); color:var(--primary); font-weight:800; font-size:.82rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .popular-item__info a { font-size:.85rem; font-weight:600; color:var(--text); line-height:1.4; display:block; margin-bottom:3px; }
+    .popular-item__info a:hover { color:var(--primary); }
+    .popular-item__info span { font-size:.75rem; color:var(--text-muted); }
+
+    /* Tags cloud */
+    .tags-cloud { display:flex; flex-wrap:wrap; gap:8px; }
+    .tag { padding:5px 12px; border-radius:50px; background:var(--bg); color:var(--text-muted); font-size:.78rem; font-weight:600; border:1px solid var(--border); cursor:pointer; transition:.3s; }
+    .tag:hover { background:var(--primary); color:var(--white); border-color:var(--primary); }
+
+    /* Archives */
+    .archive-list li { padding:9px 0; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; font-size:.87rem; }
+    .archive-list li:last-child { border-bottom:none; }
+    .archive-list a { color:var(--text); font-weight:500; transition:.3s; }
+    .archive-list a:hover { color:var(--primary); }
+    .archive-list span { background:var(--primary-light); color:var(--primary); padding:2px 8px; border-radius:50px; font-size:.75rem; font-weight:700; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1024px) { .news-page-layout { grid-template-columns:1fr; } .news-sidebar-col { position:static; } }
+    @media(max-width:768px) {
+      .article-card:not(.featured) { flex-direction:column; }
+      .article-card:not(.featured) .article-card__img { width:100%; height:200px; }
+      .page-hero h1 { font-size:1.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="container top-bar__inner">
+      <div class="top-bar__left">
+        <span><i class="fas fa-phone-alt"></i> (0235) 123 456</span>
+        <span><i class="fas fa-envelope"></i> thmycam@vinhlongedu.vn</span>
+        <span><i class="fas fa-clock"></i> Thứ 2 – Thứ 6: 7:00 – 17:00</span>
+      </div>
+      <div class="top-bar__right">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+        <a href="#"><i class="fas fa-comment-dots"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="../index.html" class="header__logo">
+        <div class="logo-icon"><i class="fas fa-school"></i></div>
+        <div class="logo-text">
+          <span class="logo-title">Tiểu học Mỹ Cẩm</span>
+          <span class="logo-sub">Xã Càng Long · Tỉnh Vĩnh Long</span>
+        </div>
+      </a>
+      <div class="header__actions">
+        <div class="search-box">
+          <input type="text" placeholder="Tìm bài viết…" />
+          <button><i class="fas fa-search"></i></button>
+        </div>
+        <a href="login.html" class="btn-login" id="loginBtn"><i class="fas fa-lock"></i> Đăng nhập</a>
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <ul class="nav-list" id="navList">
+        <li><a href="../index.html">Trang chủ</a></li>
+        <li class="has-dropdown">
+          <a href="gioi-thieu.html">Giới thiệu <i class="fas fa-chevron-down"></i></a>
+          <ul class="dropdown">
+            <li><a href="gioi-thieu.html#lich-su"><i class="fas fa-landmark"></i> Lịch sử & Truyền thống</a></li>
+            <li><a href="gioi-thieu.html#ban-giam-hieu"><i class="fas fa-user-tie"></i> Ban giám hiệu</a></li>
+            <li><a href="gioi-thieu.html#doi-ngu"><i class="fas fa-chalkboard-teacher"></i> Đội ngũ giáo viên</a></li>
+            <li><a href="gioi-thieu.html#co-so-vat-chat"><i class="fas fa-building"></i> Cơ sở vật chất</a></li>
+          </ul>
+        </li>
+        <li><a href="tin-tuc.html" class="active">Tin tức & Sự kiện</a></li>
+        <li><a href="kho-tai-lieu.html">Kho Tài liệu</a></li>
+        <li><a href="tuyen-sinh.html">Tuyển sinh</a></li>
+        <li><a href="thu-vien-anh.html">Thư viện ảnh</a></li>
+        <li><a href="lien-he.html">Liên hệ</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Trang chủ</a>
+        <i class="fas fa-chevron-right"></i>
+        <span>Tin tức & Sự kiện</span>
+      </div>
+      <h1><i class="fas fa-newspaper"></i> Tin Tức & Sự Kiện</h1>
+      <p>Cập nhật các hoạt động, thông báo và thành tích mới nhất của nhà trường</p>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="section" style="background:var(--bg);">
+    <div class="container">
+
+      <!-- BANNER HÀNH ĐỘNG DÀNH CHO ADMIN -->
+      <div class="admin-action-banner" id="adminBanner" style="display: none;">
+        <div class="admin-action-banner__info">
+          <i class="fas fa-user-shield"></i>
+          <span>Bạn đang đăng nhập với tư cách **Admin nhà trường**</span>
+        </div>
+        <button class="btn btn--primary" style="background: var(--secondary); box-shadow: none;" onclick="openPostModal()">
+          <i class="fas fa-plus-circle"></i> Đăng tin tức mới
+        </button>
+      </div>
+
+      <!-- MODAL POPUP ĐĂNG BÀI VIẾT MỚI (TỐI GIẢN) -->
+      <div class="admin-modal" id="postModal">
+        <div class="admin-modal__container">
+          <div class="admin-modal__header">
+            <h3><i class="fas fa-plus"></i> Đăng tin tức mới</h3>
+            <span class="admin-modal__close" onclick="closePostModal()">&times;</span>
+          </div>
+          <div class="admin-modal__body">
+            <form id="adminPostForm">
+              <div class="form-group">
+                <label for="modalTitle">Tiêu đề tin tức *</label>
+                <input type="text" id="modalTitle" class="form-control" placeholder="Ví dụ: Hội nghị phụ huynh đầu năm..." required />
+              </div>
+              
+              <div class="form-group">
+                <label for="modalCat">Chuyên mục tin *</label>
+                <select id="modalCat" class="form-control">
+                  <option value="thongbao">📢 Thông báo</option>
+                  <option value="hoatdong">⭐ Hoạt động</option>
+                  <option value="hoctap">📚 Học tập</option>
+                  <option value="ketqua">🏆 Kết quả</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="modalContent">Nội dung chi tiết *</label>
+                <textarea id="modalContent" class="form-control" rows="6" placeholder="Nhập nội dung tin tức..." required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label>Ảnh minh họa</label>
+                <input type="file" id="modalFile" class="form-control" accept="image/*" />
+                <span class="admin-helper-text">Chọn ảnh chụp liên quan đến sự kiện (nếu có).</span>
+              </div>
+
+              <button type="submit" class="btn btn--primary" style="width: 100%; justify-content: center; background: var(--primary);">
+                <i class="fas fa-check"></i> Đăng tin lên website
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="news-filter-bar fade-up">
+        <div class="cat-tabs">
+          <div class="cat-tab active" data-cat="all">Tất cả</div>
+          <div class="cat-tab" data-cat="thongbao"><i class="fas fa-bullhorn"></i> Thông báo</div>
+          <div class="cat-tab" data-cat="hoatdong"><i class="fas fa-star"></i> Hoạt động</div>
+          <div class="cat-tab" data-cat="hoctap"><i class="fas fa-book-open"></i> Học tập</div>
+          <div class="cat-tab" data-cat="ketqua"><i class="fas fa-trophy"></i> Kết quả</div>
+        </div>
+        <div class="filter-row">
+          <input type="text" placeholder="🔍 Tìm kiếm bài viết…" id="newsSearch" />
+          <select id="newsYear">
+            <option>Năm học 2025–2026</option>
+            <option>Năm học 2024–2025</option>
+            <option>Năm học 2023–2024</option>
+          </select>
+          <select id="newsSort">
+            <option>Mới nhất trước</option>
+            <option>Cũ nhất trước</option>
+            <option>Xem nhiều nhất</option>
+          </select>
+        </div>
+        <div class="result-count">Hiển thị <strong>8</strong> trong tổng số <strong>47</strong> bài viết</div>
+      </div>
+
+      <!-- Layout 2 cột -->
+      <div class="news-page-layout">
+
+        <!-- Danh sách bài viết -->
+        <div>
+          <div class="article-list" id="articleList">
+
+            <!-- Bài featured -->
+            <article class="article-card featured fade-up" data-cat="hoatdong">
+              <div class="article-card__img">
+                <div class="img-placeholder img-placeholder--lg"></div>
+                <span class="cat-badge cat-badge--hoatdong">Hoạt động</span>
+              </div>
+              <div class="article-card__body">
+                <div class="article-meta">
+                  <span><i class="fas fa-calendar-alt"></i> 28/06/2025</span>
+                  <span><i class="fas fa-user"></i> Ban biên tập</span>
+                  <span><i class="fas fa-eye"></i> 1.240 lượt xem</span>
+                </div>
+                <h2><a href="#">Lễ tổng kết năm học 2024–2025: Trao thưởng 120 học sinh xuất sắc và 18 giáo viên tiêu biểu</a></h2>
+                <p>Sáng ngày 28/6/2025, Trường Tiểu học Mỹ Cẩm đã tổ chức trọng thể Lễ tổng kết năm học 2024–2025. Buổi lễ có sự tham dự của đại diện Phòng GD&ĐT huyện Càng Long, Ban giám hiệu, toàn thể giáo viên và đông đảo phụ huynh, học sinh. Nhà trường đã trao tặng bằng khen và phần thưởng cho 120 học sinh đạt thành tích xuất sắc trong học tập và rèn luyện...</p>
+                <div class="article-footer">
+                  <a href="#" class="read-more-btn">Đọc bài đầy đủ <i class="fas fa-arrow-right"></i></a>
+                  <div class="share-btn">
+                    <a href="#" title="Chia sẻ Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" title="Sao chép liên kết"><i class="fas fa-link"></i></a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Bài 2 -->
+            <article class="article-card fade-up" data-cat="thongbao">
+              <div class="article-card__img">
+                <div class="img-placeholder"></div>
+                <span class="cat-badge cat-badge--thongbao">Thông báo</span>
+              </div>
+              <div class="article-card__body">
+                <div class="article-meta">
+                  <span><i class="fas fa-calendar-alt"></i> 25/06/2025</span>
+                  <span><i class="fas fa-eye"></i> 856 lượt xem</span>
+                </div>
+                <h2><a href="#">Kế hoạch năm học 2025–2026 và thời gian tựu trường chính thức</a></h2>
+                <p>Ban giám hiệu nhà trường trân trọng thông báo kế hoạch năm học mới 2025–2026. Theo đó, học sinh tựu trường vào ngày 25/8/2025 và khai giảng vào sáng ngày 5/9/2025...</p>
+                <div class="article-footer">
+                  <a href="#" class="read-more-btn">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                  <div class="share-btn"><a href="#"><i class="fab fa-facebook-f"></i></a></div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Bài 3 -->
+            <article class="article-card fade-up" data-cat="hoctap">
+              <div class="article-card__img">
+                <div class="img-placeholder"></div>
+                <span class="cat-badge cat-badge--hoctap">Học tập</span>
+              </div>
+              <div class="article-card__body">
+                <div class="article-meta">
+                  <span><i class="fas fa-calendar-alt"></i> 20/06/2025</span>
+                  <span><i class="fas fa-eye"></i> 620 lượt xem</span>
+                </div>
+                <h2><a href="#">Bổ sung 150 bài giảng điện tử vào kho tài liệu số học kỳ II năm học 2024–2025</a></h2>
+                <p>Tổ chuyên môn nhà trường đã hoàn thành việc số hóa và tải lên 150 bài giảng điện tử mới cho tất cả các khối lớp từ 1 đến 5. Các tài liệu bao gồm bài giảng PowerPoint, video bài học và phiếu bài tập...</p>
+                <div class="article-footer">
+                  <a href="#" class="read-more-btn">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                  <div class="share-btn"><a href="#"><i class="fab fa-facebook-f"></i></a></div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Bài 4 -->
+            <article class="article-card fade-up" data-cat="hoatdong">
+              <div class="article-card__img">
+                <div class="img-placeholder"></div>
+                <span class="cat-badge cat-badge--hoatdong">Hoạt động</span>
+              </div>
+              <div class="article-card__body">
+                <div class="article-meta">
+                  <span><i class="fas fa-calendar-alt"></i> 15/06/2025</span>
+                  <span><i class="fas fa-eye"></i> 748 lượt xem</span>
+                </div>
+                <h2><a href="#">Hội thi "Rung chuông vàng" cấp trường năm học 2024–2025 thu hút hơn 400 học sinh tham gia</a></h2>
+                <p>Hội thi Rung chuông vàng được tổ chức sôi nổi với sự tham gia của học sinh các khối 3, 4, 5. Các em đã thể hiện kiến thức phong phú qua 4 vòng thi hấp dẫn về Toán, Tiếng Việt, Khoa học và Đạo đức...</p>
+                <div class="article-footer">
+                  <a href="#" class="read-more-btn">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                  <div class="share-btn"><a href="#"><i class="fab fa-facebook-f"></i></a></div>
+                </div>
+              </div>
+            </article>
+
+            <!-- Bài 5 -->
+            <article class="article-card fade-up" data-cat="ketqua">
+              <div class="article-card__img">
+                <div class="img-placeholder"></div>
+                <span class="cat-badge cat-badge--ketqua">Kết quả</span>
+              </div>
+              <div class="article-card__body">
+                <div class="article-meta">
+                  <span><i class="fas fa-calendar-alt"></i> 10/06/2025</span>
+                  <span><i class="fas fa-eye"></i> 932 lượt xem</span>
+                </div>
+                <h2><a href="#">Kết quả thi học sinh giỏi cấp huyện năm 2025: 12 giải Nhất, 8 giải Nhì</a></h2>
+                <p>Với sự chuẩn bị kỹ lưỡng và nỗ lực của thầy và trò, đoàn học sinh Trường Tiểu học Mỹ Cẩm đã xuất sắc giành được 12 giải Nhất, 8 giải Nhì và 15 giải Ba tại kỳ thi học sinh giỏi cấp huyện Càng Long...</p>
+                <div class="article-footer">
+                  <a href="#" class="read-more-btn">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                  <div class="share-btn"><a href="#"><i class="fab fa-facebook-f"></i></a></div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+
+          <!-- Pagination -->
+          <div class="pagination">
+            <div class="page-btn"><i class="fas fa-chevron-left"></i></div>
+            <div class="page-btn active">1</div>
+            <div class="page-btn">2</div>
+            <div class="page-btn">3</div>
+            <div class="page-btn dots">…</div>
+            <div class="page-btn">6</div>
+            <div class="page-btn"><i class="fas fa-chevron-right"></i></div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="news-sidebar-col">
+
+          <!-- Tìm kiếm -->
+          <div class="widget fade-up">
+            <div class="widget__title"><i class="fas fa-search"></i> Tìm kiếm</div>
+            <div class="widget__body">
+              <div class="search-box" style="border-radius:10px;">
+                <input type="text" placeholder="Nhập từ khoá…" style="width:100%;" />
+                <button><i class="fas fa-search"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bài viết nổi bật -->
+          <div class="widget fade-up">
+            <div class="widget__title"><i class="fas fa-fire"></i> Bài viết nổi bật</div>
+            <div class="widget__body">
+              <ul class="popular-list">
+                <li class="popular-item">
+                  <div class="popular-item__num">1</div>
+                  <div class="popular-item__info">
+                    <a href="#">Lễ tổng kết năm học 2024–2025 và trao thưởng học sinh xuất sắc</a>
+                    <span><i class="fas fa-eye"></i> 1.240 lượt xem</span>
+                  </div>
+                </li>
+                <li class="popular-item">
+                  <div class="popular-item__num">2</div>
+                  <div class="popular-item__info">
+                    <a href="#">Kết quả thi học sinh giỏi cấp huyện năm 2025</a>
+                    <span><i class="fas fa-eye"></i> 932 lượt xem</span>
+                  </div>
+                </li>
+                <li class="popular-item">
+                  <div class="popular-item__num">3</div>
+                  <div class="popular-item__info">
+                    <a href="#">Thông báo tuyển sinh lớp 1 năm học 2025–2026</a>
+                    <span><i class="fas fa-eye"></i> 874 lượt xem</span>
+                  </div>
+                </li>
+                <li class="popular-item">
+                  <div class="popular-item__num">4</div>
+                  <div class="popular-item__info">
+                    <a href="#">Hội thi Rung chuông vàng cấp trường 2025</a>
+                    <span><i class="fas fa-eye"></i> 748 lượt xem</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Danh mục -->
+          <div class="widget fade-up">
+            <div class="widget__title"><i class="fas fa-folder-open"></i> Danh mục</div>
+            <div class="widget__body">
+              <ul class="archive-list">
+                <li><a href="#">📢 Thông báo chung</a><span>18</span></li>
+                <li><a href="#">⭐ Hoạt động trường</a><span>14</span></li>
+                <li><a href="#">📚 Học tập</a><span>9</span></li>
+                <li><a href="#">🏆 Kết quả thi đua</a><span>6</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Lưu trữ -->
+          <div class="widget fade-up">
+            <div class="widget__title"><i class="fas fa-archive"></i> Lưu trữ theo tháng</div>
+            <div class="widget__body">
+              <ul class="archive-list">
+                <li><a href="#">Tháng 6/2025</a><span>8</span></li>
+                <li><a href="#">Tháng 5/2025</a><span>6</span></li>
+                <li><a href="#">Tháng 4/2025</a><span>9</span></li>
+                <li><a href="#">Tháng 3/2025</a><span>7</span></li>
+                <li><a href="#">Tháng 2/2025</a><span>5</span></li>
+                <li><a href="#">Tháng 1/2025</a><span>4</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="widget fade-up">
+            <div class="widget__title"><i class="fas fa-tags"></i> Từ khoá</div>
+            <div class="widget__body">
+              <div class="tags-cloud">
+                <span class="tag">Khai giảng</span><span class="tag">Học sinh giỏi</span>
+                <span class="tag">Tuyển sinh</span><span class="tag">Tiếng Anh</span>
+                <span class="tag">STEM</span><span class="tag">Hội trại</span>
+                <span class="tag">Thể dục</span><span class="tag">Âm nhạc</span>
+                <span class="tag">Toán</span><span class="tag">Thư viện</span>
+                <span class="tag">Giáo viên</span><span class="tag">Phụ huynh</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER RÚT GỌN -->
+  <footer class="footer" style="padding:36px 0 0;">
+    <div class="container footer__grid" style="grid-template-columns:1.4fr 1fr 1fr; padding-bottom:28px;">
+      <div class="footer__col footer__col--brand">
+        <div class="footer-logo">
+          <i class="fas fa-school"></i>
+          <div><strong>Tiểu học Mỹ Cẩm</strong><small>Xã Càng Long – Tỉnh Vĩnh Long</small></div>
+        </div>
+        <p>Nơi ươm mầm những ước mơ và nuôi dưỡng thế hệ tương lai của vùng đất Vĩnh Long.</p>
+        <div class="footer-social">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer__col">
+        <h4>Thông tin trường</h4>
+        <ul>
+          <li><i class="fas fa-map-marker-alt"></i> Xã Càng Long, Huyện Càng Long, Tỉnh Vĩnh Long</li>
+          <li><i class="fas fa-phone-alt"></i> (0235) 123 456</li>
+          <li><i class="fas fa-envelope"></i> thmycam@vinhlongedu.vn</li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Liên kết nhanh</h4>
+        <ul>
+          <li><a href="../index.html">Trang chủ</a></li>
+          <li><a href="kho-tai-lieu.html">Kho Tài liệu số</a></li>
+          <li><a href="tuyen-sinh.html">Tuyển sinh</a></li>
+          <li><a href="lien-he.html">Liên hệ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <p>© 2025 Trường Tiểu học Mỹ Cẩm – Xã Càng Long, Tỉnh Vĩnh Long</p>
+        <p><a href="#">Chính sách bảo mật</a></p>
+      </div>
+    </div>
+  </footer>
+  <button class="back-to-top" id="backToTop"><i class="fas fa-chevron-up"></i></button>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // Category tab filter
+    document.querySelectorAll('.cat-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const cat = tab.dataset.cat;
+        document.querySelectorAll('.article-card[data-cat]').forEach(card => {
+          card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+        });
+      });
+    });
+
+    // Live search
+    document.getElementById('newsSearch').addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      document.querySelectorAll('.article-card').forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = text.includes(q) ? '' : 'none';
+      });
+    });
+
+    // ── KIỂM TRA ĐĂNG NHẬP ADMIN & Inline Actions ──
+    const banner = document.getElementById('adminBanner');
+    if (localStorage.getItem('isAdminLoggedIn') === 'true') {
+      if (banner) banner.style.display = 'flex';
+      
+      // Hiển thị nút xóa trực tiếp trên từng bài viết
+      document.querySelectorAll('.article-card').forEach((card, idx) => {
+        const shareBtn = card.querySelector('.share-btn');
+        if (shareBtn) {
+          const id = `article-row-${idx}`;
+          card.id = id;
+          shareBtn.innerHTML += `
+            <a href="javascript:void(0)" onclick="deleteArticle('${id}')" style="background:#fff0ee; color:#e53935;" title="Xoá bài"><i class="fas fa-trash-alt"></i></a>
+          `;
+        }
+      });
+    }
+
+    function openPostModal() {
+      document.getElementById('postModal').style.display = 'flex';
+    }
+
+    function closePostModal() {
+      document.getElementById('postModal').style.display = 'none';
+      document.getElementById('adminPostForm').reset();
+    }
+
+    function deleteArticle(id) {
+      if (confirm('Bạn có chắc muốn xoá bài viết này trực tiếp trên giao diện không?')) {
+        document.getElementById(id).remove();
+      }
+    }
+
+    // Xử lý gửi tin mới từ modal
+    document.getElementById('adminPostForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const title = document.getElementById('modalTitle').value;
+      const cat = document.getElementById('modalCat').value;
+      const categoryText = document.getElementById('modalCat').options[document.getElementById('modalCat').selectedIndex].text.split(' ')[1];
+      const content = document.getElementById('modalContent').value;
+      
+      // Tạo một thẻ card mới giống cấu trúc
+      const articleList = document.getElementById('articleList');
+      const newCard = document.createElement('article');
+      const newId = `article-new-${Date.now()}`;
+      newCard.id = newId;
+      newCard.className = 'article-card fade-up visible';
+      newCard.dataset.cat = cat;
+      
+      const today = new Date();
+      const dateString = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+
+      newCard.innerHTML = `
+        <div class="article-card__img">
+          <div class="img-placeholder"><i class="fas fa-image" style="font-size: 2.5rem;"></i></div>
+          <span class="cat-badge cat-badge--${cat}">${categoryText}</span>
+        </div>
+        <div class="article-card__body">
+          <div class="article-meta">
+            <span><i class="fas fa-calendar-alt"></i> ${dateString}</span>
+            <span><i class="fas fa-user"></i> Admin nhà trường</span>
+            <span><i class="fas fa-eye"></i> 1 lượt xem</span>
+          </div>
+          <h2><a href="#">${title}</a></h2>
+          <p>${content}</p>
+          <div class="article-footer">
+            <a href="#" class="read-more-btn">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+            <div class="share-btn">
+              <a href="#" title="Chia sẻ"><i class="fab fa-facebook-f"></i></a>
+              <a href="javascript:void(0)" onclick="deleteArticle('${newId}')" style="background:#fff0ee; color:#e53935;" title="Xoá bài"><i class="fas fa-trash-alt"></i></a>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Thêm bài lên đầu danh sách
+      articleList.insertBefore(newCard, articleList.firstChild);
+      
+      // Đóng modal
+      closePostModal();
+      
+      // Cuộn tới bài viết mới
+      newCard.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

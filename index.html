@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trường Tiểu học Mỹ Cẩm – Xã Càng Long, Tỉnh Vĩnh Long</title>
+  <meta name="description" content="Website chính thức Trường Tiểu học Mỹ Cẩm, xã Càng Long, tỉnh Vĩnh Long – Kênh thông tin, kho tài liệu số và cổng kết nối nhà trường – phụ huynh." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/admin-actions.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script>
+    // Kiểm tra đăng nhập admin ngay khi trang bắt đầu tải
+    document.addEventListener('DOMContentLoaded', function() {
+      if (localStorage.getItem('isAdminLoggedIn') === 'true') {
+        const loginBtn = document.getElementById('loginBtn');
+        if (loginBtn) {
+          loginBtn.innerHTML = '<i class="fas fa-user-cog"></i> Admin Panel';
+          loginBtn.setAttribute('href', 'pages/admin.html');
+          
+          // Thêm nút đăng xuất
+          const parent = loginBtn.parentElement;
+          if (parent && !document.getElementById('adminLogoutBtn')) {
+            const logoutBtn = document.createElement('a');
+            logoutBtn.id = 'adminLogoutBtn';
+            logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+            logoutBtn.className = 'btn-login';
+            logoutBtn.style.background = '#e53935';
+            logoutBtn.style.padding = '9px 12px';
+            logoutBtn.style.marginLeft = '8px';
+            logoutBtn.setAttribute('href', 'javascript:void(0)');
+            logoutBtn.addEventListener('click', function() {
+              if (confirm('Bạn có muốn đăng xuất tài khoản Admin không?')) {
+                localStorage.removeItem('isAdminLoggedIn');
+                window.location.reload();
+              }
+            });
+            parent.appendChild(logoutBtn);
+          }
+        }
+      }
+    });
+  </script>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- TOP BAR                                   -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="top-bar">
+    <div class="container top-bar__inner">
+      <div class="top-bar__left">
+        <span><i class="fas fa-phone-alt"></i> (0235) 123 456</span>
+        <span><i class="fas fa-envelope"></i> thmycam@vinhlong.edu.vn</span>
+        <span><i class="fas fa-clock"></i> Thứ 2 – Thứ 6: 7:00 – 17:00</span>
+      </div>
+      <div class="top-bar__right">
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="#" aria-label="Zalo"><i class="fas fa-comment-dots"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- HEADER                                    -->
+  <!-- ══════════════════════════════════════════ -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="index.html" class="header__logo">
+        <div class="logo-icon">
+          <i class="fas fa-school"></i>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">Tiểu học Mỹ Cẩm</span>
+          <span class="logo-sub">Xã Càng Long · Tỉnh Vĩnh Long</span>
+        </div>
+      </a>
+      <div class="header__actions">
+        <div class="search-box" id="searchBox">
+          <input type="text" placeholder="Tìm tài liệu, thông báo…" id="searchInput" aria-label="Tìm kiếm" />
+          <button aria-label="Tìm kiếm"><i class="fas fa-search"></i></button>
+        </div>
+        <a href="pages/login.html" class="btn-login" id="loginBtn">
+          <i class="fas fa-lock"></i> Đăng nhập
+        </a>
+        <button class="hamburger" id="hamburger" aria-label="Mở menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- NAVIGATION                                -->
+  <!-- ══════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <ul class="nav-list" id="navList">
+        <li><a href="index.html" class="active">Trang chủ</a></li>
+        <li class="has-dropdown">
+          <a href="pages/gioi-thieu.html">Giới thiệu <i class="fas fa-chevron-down"></i></a>
+          <ul class="dropdown">
+            <li><a href="pages/gioi-thieu.html#lich-su"><i class="fas fa-landmark"></i> Lịch sử & Truyền thống</a></li>
+            <li><a href="pages/gioi-thieu.html#ban-giam-hieu"><i class="fas fa-user-tie"></i> Ban giám hiệu</a></li>
+            <li><a href="pages/gioi-thieu.html#doi-ngu"><i class="fas fa-chalkboard-teacher"></i> Đội ngũ giáo viên</a></li>
+            <li><a href="pages/gioi-thieu.html#co-so-vat-chat"><i class="fas fa-building"></i> Cơ sở vật chất</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="pages/tin-tuc.html">Tin tức & Sự kiện <i class="fas fa-chevron-down"></i></a>
+          <ul class="dropdown">
+            <li><a href="pages/tin-tuc.html"><i class="fas fa-bullhorn"></i> Thông báo chung</a></li>
+            <li><a href="pages/tin-tuc.html"><i class="fas fa-star"></i> Hoạt động trường</a></li>
+            <li><a href="pages/tin-tuc.html"><i class="fas fa-trophy"></i> Kết quả thi đua</a></li>
+          </ul>
+        </li>
+        <li class="has-dropdown">
+          <a href="pages/kho-tai-lieu.html">Kho Tài liệu <i class="fas fa-chevron-down"></i></a>
+          <ul class="dropdown">
+            <li><a href="pages/kho-tai-lieu.html"><i class="fas fa-book-open"></i> Bài giảng & Đề thi</a></li>
+            <li><a href="pages/kho-tai-lieu.html"><i class="fas fa-video"></i> Video bài học</a></li>
+            <li><a href="pages/kho-tai-lieu.html"><i class="fas fa-file-alt"></i> Biểu mẫu & Văn bản</a></li>
+            <li><a href="pages/kho-tai-lieu.html"><i class="fas fa-chart-bar"></i> Báo cáo & Số liệu</a></li>
+          </ul>
+        </li>
+        <li><a href="pages/tuyen-sinh.html">Tuyển sinh</a></li>
+        <li><a href="pages/thu-vien-anh.html">Thư viện ảnh</a></li>
+        <li><a href="pages/lien-he.html">Liên hệ</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- TICKER – Thông báo khẩn                   -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="ticker-wrap">
+    <div class="ticker-label"><i class="fas fa-bell"></i> THÔNG BÁO</div>
+    <div class="ticker-content">
+      <div class="ticker-track" id="tickerTrack">
+        <span>📢 Lịch họp phụ huynh đầu năm: Thứ 7, ngày 28/8/2026</span>
+        <span>📢 Nghỉ lễ Quốc khánh 2/9: Học sinh nghỉ từ 01/9 – 02/9/2026</span>
+        <span>📢 Tuyển sinh lớp 1 năm học 2026–2027: Hồ sơ nộp từ 01/7 – 10/7/2026</span>
+        <span>📢 Lịch tiêm chủng vắc-xin đợt 2 cho học sinh khối 1, 2: 15/9/2026</span>
+       </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- HERO SLIDER                               -->
+  <!-- ══════════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero__slides" id="heroSlides">
+
+      <div class="hero__slide active" style="background: linear-gradient(135deg,rgba(26,111,181,0.82),rgba(46,204,113,0.7)), url('images/slide1.jpg') center/cover no-repeat;">
+        <div class="hero__content">
+          <span class="hero__badge"><i class="fas fa-star"></i> Xã Càng Long – Tỉnh Vĩnh Long</span>
+          <h1>Nơi Ươm Mầm<br /><strong>Những Ước Mơ</strong></h1>
+          <p>Môi trường học tập an toàn, sáng tạo và đầy yêu thương cho học sinh tiểu học.</p>
+          <div class="hero__btns">
+            <a href="pages/tuyen-sinh.html" class="btn btn--primary"><i class="fas fa-graduation-cap"></i> Đăng ký tuyển sinh</a>
+            <a href="pages/gioi-thieu.html" class="btn btn--outline">Tìm hiểu thêm</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__slide" style="background: linear-gradient(135deg,rgba(245,166,35,0.82),rgba(26,111,181,0.7)), url('images/slide2.jpg') center/cover no-repeat;">
+        <div class="hero__content">
+          <span class="hero__badge"><i class="fas fa-book-open"></i> Kho Tài Liệu Số</span>
+          <h1>Học Liệu Số<br /><strong>Mọi Lúc Mọi Nơi</strong></h1>
+          <p>Hàng trăm bài giảng, đề thi và video học tập được cập nhật liên tục theo từng tuần.</p>
+          <div class="hero__btns">
+            <a href="pages/kho-tai-lieu.html" class="btn btn--primary"><i class="fas fa-folder-open"></i> Vào Kho Tài Liệu</a>
+            <a href="pages/bai-giang.html" class="btn btn--outline">Xem bài giảng</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__slide" style="background: linear-gradient(135deg,rgba(231,76,60,0.82),rgba(245,166,35,0.7)), url('images/slide3.jpg') center/cover no-repeat;">
+        <div class="hero__content">
+          <span class="hero__badge"><i class="fas fa-trophy"></i> Thành tích nổi bật</span>
+          <h1>Tự Hào<br /><strong>25 Năm Thành Lập</strong></h1>
+          <p>Hàng nghìn học sinh xuất sắc đã được bồi dưỡng và trưởng thành từ mái trường này.</p>
+          <div class="hero__btns">
+            <a href="pages/lich-su.html" class="btn btn--primary"><i class="fas fa-landmark"></i> Lịch sử trường</a>
+            <a href="pages/ket-qua.html" class="btn btn--outline">Thành tích đạt được</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slider controls -->
+    <button class="hero__prev" id="heroPrev" aria-label="Slide trước"><i class="fas fa-chevron-left"></i></button>
+    <button class="hero__next" id="heroNext" aria-label="Slide tiếp"><i class="fas fa-chevron-right"></i></button>
+    <div class="hero__dots" id="heroDots">
+      <button class="dot active" data-index="0" aria-label="Slide 1"></button>
+      <button class="dot" data-index="1" aria-label="Slide 2"></button>
+      <button class="dot" data-index="2" aria-label="Slide 3"></button>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- STATS                                     -->
+  <!-- ══════════════════════════════════════════ -->
+  <section class="stats" id="stats">
+    <div class="container stats__grid">
+      <div class="stat-item" data-target="850">
+        <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
+        <div class="stat-number" id="stat-0">0</div>
+        <div class="stat-label">Học sinh</div>
+      </div>
+      <div class="stat-item" data-target="62">
+        <div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+        <div class="stat-number" id="stat-1">0</div>
+        <div class="stat-label">Cán bộ, Giáo viên</div>
+      </div>
+      <div class="stat-item" data-target="25">
+        <div class="stat-icon"><i class="fas fa-award"></i></div>
+        <div class="stat-number" id="stat-2">0</div>
+        <div class="stat-label">Năm thành lập</div>
+      </div>
+      <div class="stat-item" data-target="500">
+        <div class="stat-icon"><i class="fas fa-file-alt"></i></div>
+        <div class="stat-number" id="stat-3">0</div>
+        <div class="stat-label">Tài liệu số hóa</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- TIN TỨC & THÔNG BÁO                      -->
+  <!-- ══════════════════════════════════════════ -->
+  <section class="news-section section" id="newsSec">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Cập nhật mới nhất</span>
+        <h2 class="section-title">Tin Tức & Thông Báo</h2>
+        <p class="section-sub">Theo dõi các hoạt động và thông tin chính thức từ nhà trường</p>
+      </div>
+
+      <div class="news-layout">
+        <!-- Cột trái: Tin tức -->
+        <div class="news-main">
+          <div class="news-tabs">
+            <button class="tab-btn active" data-tab="all">Tất cả</button>
+            <button class="tab-btn" data-tab="thongbao">Thông báo</button>
+            <button class="tab-btn" data-tab="hoatdong">Hoạt động</button>
+            <button class="tab-btn" data-tab="hoctap">Học tập</button>
+          </div>
+
+          <div class="news-grid">
+            <article class="news-card featured" data-cat="hoatdong">
+              <div class="news-card__img">
+                <div class="img-placeholder img-placeholder--lg"><i class="fas fa-image"></i></div>
+                <span class="news-card__cat">Hoạt động</span>
+              </div>
+              <div class="news-card__body">
+                <time class="news-card__date"><i class="fas fa-calendar-alt"></i> 28/06/2025</time>
+                <h3><a href="#">Lễ tổng kết năm học 2024–2025: Trao thưởng 120 học sinh xuất sắc</a></h3>
+                <p>Buổi lễ diễn ra trang trọng với sự tham dự của đông đảo phụ huynh và các em học sinh. Nhà trường trao tặng bằng khen cho những em có thành tích học tập xuất sắc...</p>
+                <a href="#" class="read-more">Xem chi tiết <i class="fas fa-arrow-right"></i></a>
+              </div>
+            </article>
+
+            <div class="news-small-grid">
+              <article class="news-card" data-cat="thongbao">
+                <div class="news-card__img">
+                  <div class="img-placeholder"><i class="fas fa-image"></i></div>
+                  <span class="news-card__cat">Thông báo</span>
+                </div>
+                <div class="news-card__body">
+                  <time><i class="fas fa-calendar-alt"></i> 25/06/2025</time>
+                  <h3><a href="#">Kế hoạch năm học 2025–2026 chính thức ban hành</a></h3>
+                  <a href="#" class="read-more">Xem chi tiết <i class="fas fa-arrow-right"></i></a>
+                </div>
+              </article>
+
+              <article class="news-card" data-cat="hoctap">
+                <div class="news-card__img">
+                  <div class="img-placeholder"><i class="fas fa-image"></i></div>
+                  <span class="news-card__cat">Học tập</span>
+                </div>
+                <div class="news-card__body">
+                  <time><i class="fas fa-calendar-alt"></i> 20/06/2025</time>
+                  <h3><a href="#">Thêm 150 bài giảng điện tử vào kho tài liệu số kỳ II</a></h3>
+                  <a href="#" class="read-more">Xem chi tiết <i class="fas fa-arrow-right"></i></a>
+                </div>
+              </article>
+
+              <article class="news-card" data-cat="hoatdong">
+                <div class="news-card__img">
+                  <div class="img-placeholder"><i class="fas fa-image"></i></div>
+                  <span class="news-card__cat">Hoạt động</span>
+                </div>
+                <div class="news-card__body">
+                  <time><i class="fas fa-calendar-alt"></i> 15/06/2025</time>
+                  <h3><a href="#">Hội thi "Rung chuông vàng" cấp trường năm học 2025</a></h3>
+                  <a href="#" class="read-more">Xem chi tiết <i class="fas fa-arrow-right"></i></a>
+                </div>
+              </article>
+            </div>
+          </div>
+          <div class="text-center mt-4">
+            <a href="pages/tin-tuc.html" class="btn btn--primary">Xem tất cả tin tức <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </div>
+
+        <!-- Cột phải: Văn bản & Thông báo -->
+        <aside class="news-sidebar">
+          <div class="sidebar-card">
+            <h3 class="sidebar-card__title"><i class="fas fa-file-download"></i> Văn bản – Thông báo</h3>
+            <ul class="doc-list">
+              <li class="doc-item">
+                <div class="doc-icon pdf"><i class="fas fa-file-pdf"></i></div>
+                <div class="doc-info">
+                  <span class="doc-name">Kế hoạch năm học 2025–2026</span>
+                  <span class="doc-date">30/06/2025</span>
+                </div>
+                <a href="#" class="doc-btn" title="Tải về"><i class="fas fa-download"></i></a>
+              </li>
+              <li class="doc-item">
+                <div class="doc-icon pdf"><i class="fas fa-file-pdf"></i></div>
+                <div class="doc-info">
+                  <span class="doc-name">Thực đơn bán trú tháng 9/2025</span>
+                  <span class="doc-date">28/06/2025</span>
+                </div>
+                <a href="#" class="doc-btn" title="Tải về"><i class="fas fa-download"></i></a>
+              </li>
+              <li class="doc-item">
+                <div class="doc-icon pdf"><i class="fas fa-file-pdf"></i></div>
+                <div class="doc-info">
+                  <span class="doc-name">Lịch thi học kỳ I – 2025</span>
+                  <span class="doc-date">25/06/2025</span>
+                </div>
+                <a href="#" class="doc-btn" title="Tải về"><i class="fas fa-download"></i></a>
+              </li>
+              <li class="doc-item">
+                <div class="doc-icon word"><i class="fas fa-file-word"></i></div>
+                <div class="doc-info">
+                  <span class="doc-name">Mẫu đơn xin nghỉ học</span>
+                  <span class="doc-date">10/06/2025</span>
+                </div>
+                <a href="#" class="doc-btn" title="Tải về"><i class="fas fa-download"></i></a>
+              </li>
+              <li class="doc-item">
+                <div class="doc-icon pdf"><i class="fas fa-file-pdf"></i></div>
+                <div class="doc-info">
+                  <span class="doc-name">Nội quy học sinh 2025–2026</span>
+                  <span class="doc-date">01/06/2025</span>
+                </div>
+                <a href="#" class="doc-btn" title="Tải về"><i class="fas fa-download"></i></a>
+              </li>
+            </ul>
+            <a href="pages/bieu-mau.html" class="sidebar-more">Xem tất cả văn bản <i class="fas fa-arrow-right"></i></a>
+          </div>
+
+          <!-- Lịch sự kiện sidebar -->
+          <div class="sidebar-card mt-4">
+            <h3 class="sidebar-card__title"><i class="fas fa-calendar-check"></i> Sự kiện sắp tới</h3>
+            <ul class="event-list">
+              <li class="event-item">
+                <div class="event-date"><span>05</span>Sep</div>
+                <div class="event-info">
+                  <strong>Lễ Khai Giảng 2025–2026</strong>
+                  <span>7:30 – Sân trường</span>
+                </div>
+              </li>
+              <li class="event-item">
+                <div class="event-date"><span>20</span>Sep</div>
+                <div class="event-info">
+                  <strong>Họp Phụ Huynh học kỳ I</strong>
+                  <span>14:00 – Các lớp học</span>
+                </div>
+              </li>
+              <li class="event-item">
+                <div class="event-date"><span>15</span>Oct</div>
+                <div class="event-info">
+                  <strong>Hội thi Tiếng Anh cấp trường</strong>
+                  <span>8:00 – Hội trường lớn</span>
+                </div>
+              </li>
+              <li class="event-item">
+                <div class="event-date"><span>20</span>Nov</div>
+                <div class="event-info">
+                  <strong>Ngày Nhà Giáo Việt Nam</strong>
+                  <span>7:30 – Toàn trường</span>
+                </div>
+              </li>
+            </ul>
+            <a href="#timeline" class="sidebar-more">Xem lịch năm học <i class="fas fa-arrow-right"></i></a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- TIMELINE NĂM HỌC                         -->
+  <!-- ══════════════════════════════════════════ -->
+  <section class="timeline-section section" id="timeline">
+    <div class="container">
+      <div class="section-header section-header--light">
+        <span class="section-tag section-tag--light">Kế hoạch</span>
+        <h2 class="section-title">Lộ Trình Năm Học 2025–2026</h2>
+        <p class="section-sub">Theo dõi các cột mốc quan trọng trong năm học</p>
+      </div>
+      <div class="timeline-scroll-wrapper">
+        <div class="timeline-track" id="timelineTrack">
+          <div class="tl-item">
+            <div class="tl-dot"><i class="fas fa-flag"></i></div>
+            <div class="tl-card">
+              <div class="tl-date">05/09/2025</div>
+              <div class="tl-title">Lễ Khai Giảng</div>
+              <div class="tl-desc">Năm học 2025–2026 chính thức bắt đầu</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"><i class="fas fa-users"></i></div>
+            <div class="tl-card">
+              <div class="tl-date">20/09/2025</div>
+              <div class="tl-title">Họp Phụ Huynh HK I</div>
+              <div class="tl-desc">Triển khai kế hoạch học kỳ I</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"><i class="fas fa-running"></i></div>
+            <div class="tl-card">
+              <div class="tl-date">15/11/2025</div>
+              <div class="tl-title">Hội Khỏe Phù Đổng</div>
+              <div class="tl-desc">Hội thi thể dục thể thao cấp trường</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"><i class="fas fa-pencil-alt"></i></div>
+            <div class="tl-card">
+              <div class="tl-date">15/12/2025</div>
+              <div class="tl-title">Thi Học Kỳ I</div>
+              <div class="tl-desc">Kiểm tra cuối học kỳ I toàn trường</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"><i class="fas fa-snowflake"></i></div>
+            <div class="tl-card">
+              <div class="tl-date">20/12/2025</div>
+              <div class="tl-title">Nghỉ Đông – Tết</div>
+              <div class="tl-desc">Nghỉ Tết Nguyên Đán theo lịch Bộ GD</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"><i class="fas fa-seedling"></i></div>
+            <div class="tl-card">
+              <div class="tl-date">10/02/2026</div>
+              <div class="tl-title">Khai Giảng HK II</div>
+              <div class="tl-desc">Bắt đầu học kỳ II năm học 2025–2026</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"><i class="fas fa-campground"></i></div>
+            <div class="tl-card">
+              <div class="tl-date">15/03/2026</div>
+              <div class="tl-title">Hội Trại 26/3</div>
+              <div class="tl-desc">Hoạt động Đội – trại hè thiếu nhi</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"><i class="fas fa-pen-nib"></i></div>
+            <div class="tl-card">
+              <div class="tl-date">25/04/2026</div>
+              <div class="tl-title">Thi Học Kỳ II</div>
+              <div class="tl-desc">Kiểm tra cuối năm học toàn trường</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot tl-dot--end"><i class="fas fa-graduation-cap"></i></div>
+            <div class="tl-card">
+              <div class="tl-date">25/05/2026</div>
+              <div class="tl-title">Lễ Bế Giảng</div>
+              <div class="tl-desc">Tổng kết & trao thưởng cuối năm học</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timeline-nav">
+        <button id="tlPrev" aria-label="Lùi"><i class="fas fa-chevron-left"></i></button>
+        <button id="tlNext" aria-label="Tiến"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- DIGITAL HUB – Cổng Không Gian Số         -->
+  <!-- ══════════════════════════════════════════ -->
+  <section class="hub-section section" id="hubSec">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Truy cập nhanh</span>
+        <h2 class="section-title">Cổng Không Gian Số</h2>
+        <p class="section-sub">Kho tài liệu, số liệu và công cụ quản lý tập trung tại một nơi</p>
+      </div>
+
+      <!-- Bộ lọc tài liệu nhanh -->
+      <div class="doc-filter">
+        <select id="filterKhoi" aria-label="Chọn khối lớp">
+          <option value="">📚 Chọn khối lớp</option>
+          <option>Khối 1</option>
+          <option>Khối 2</option>
+          <option>Khối 3</option>
+          <option>Khối 4</option>
+          <option>Khối 5</option>
+        </select>
+        <select id="filterMon" aria-label="Chọn môn học">
+          <option value="">📖 Chọn môn học</option>
+          <option>Toán</option>
+          <option>Tiếng Việt</option>
+          <option>Tiếng Anh</option>
+          <option>Khoa học</option>
+          <option>Lịch sử & Địa lý</option>
+          <option>Đạo đức</option>
+        </select>
+        <select id="filterLoai" aria-label="Chọn loại tài liệu">
+          <option value="">📄 Loại tài liệu</option>
+          <option>Bài giảng</option>
+          <option>Đề thi</option>
+          <option>Phiếu bài tập</option>
+          <option>Video bài học</option>
+        </select>
+        <button class="btn btn--primary" id="filterBtn"><i class="fas fa-search"></i> Tìm tài liệu</button>
+      </div>
+
+      <!-- 3 Hub Cards -->
+      <div class="hub-grid">
+        <div class="hub-card hub-card--green">
+          <div class="hub-card__icon"><i class="fas fa-book-open"></i></div>
+          <div class="hub-card__body">
+            <h3>Kho Bài Giảng & Đề Thi</h3>
+            <p>Thư viện tài liệu học tập phân loại theo khối lớp, môn học và từng tuần – dành cho học sinh và phụ huynh.</p>
+            <ul class="hub-card__stats">
+              <li><i class="fas fa-file-pdf"></i> 320 Bài giảng</li>
+              <li><i class="fas fa-clipboard-list"></i> 180 Đề thi</li>
+              <li><i class="fas fa-tasks"></i> 250 Phiếu bài tập</li>
+            </ul>
+          </div>
+          <a href="pages/kho-tai-lieu.html" class="hub-card__btn">Truy cập kho <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="hub-card hub-card--blue">
+          <div class="hub-card__icon"><i class="fas fa-chart-line"></i></div>
+          <div class="hub-card__body">
+            <h3>Sổ Điểm & Chuyên Cần</h3>
+            <p>Hệ thống quản lý số liệu học sinh nội bộ – nhập điểm, chuyên cần và xuất báo cáo PDF/Excel tự động.</p>
+            <ul class="hub-card__stats">
+              <li><i class="fas fa-lock"></i> Yêu cầu đăng nhập</li>
+              <li><i class="fas fa-file-excel"></i> Xuất Excel 1-click</li>
+              <li><i class="fas fa-shield-alt"></i> Bảo mật phân quyền</li>
+            </ul>
+          </div>
+          <a href="pages/login.html" class="hub-card__btn">Đăng nhập GV <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="hub-card hub-card--orange">
+          <div class="hub-card__icon"><i class="fas fa-chalkboard"></i></div>
+          <div class="hub-card__body">
+            <h3>Góc Chuyên Môn Giáo Án</h3>
+            <p>Không gian chia sẻ nội bộ – giáo án điện tử, sáng kiến kinh nghiệm và học liệu số dành cho đội ngũ giáo viên.</p>
+            <ul class="hub-card__stats">
+              <li><i class="fas fa-lightbulb"></i> Sáng kiến kinh nghiệm</li>
+              <li><i class="fas fa-video"></i> Giáo án điện tử</li>
+              <li><i class="fas fa-users"></i> Chia sẻ hội đồng</li>
+            </ul>
+          </div>
+          <a href="pages/login.html" class="hub-card__btn">Vào góc chuyên môn <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- ABOUT MINI                                -->
+  <!-- ══════════════════════════════════════════ -->
+  <section class="about-section section" id="aboutSec">
+    <div class="container about-layout">
+      <div class="about-image">
+        <div class="img-placeholder img-placeholder--about"><i class="fas fa-school"></i><span>Ảnh toàn cảnh trường</span></div>
+        <div class="about-badge">
+          <i class="fas fa-medal"></i>
+          <div><strong>Trường Chuẩn Quốc Gia</strong><span>Mức độ 1</span></div>
+        </div>
+      </div>
+      <div class="about-content">
+        <span class="section-tag">Về chúng tôi</span>
+        <h2>Trường Tiểu học Mỹ Cẩm</h2>
+        <p class="about-lead">Nơi ươm mầm những ước mơ và nuôi dưỡng những thế hệ tương lai của vùng đất Vĩnh Long.</p>
+        <p>Được thành lập tại xã Càng Long, tỉnh Vĩnh Long, Trường Tiểu học Mỹ Cẩm luôn gắn bó với sứ mệnh xây dựng một môi trường học tập thân thiện, sáng tạo và đầy yêu thương. Đội ngũ 62 cán bộ giáo viên tâm huyết, nhiệt tình là nền tảng vững chắc cho sự phát triển toàn diện của từng học sinh.</p>
+        <div class="about-values">
+          <div class="value-item"><i class="fas fa-heart"></i><span>Yêu thương</span></div>
+          <div class="value-item"><i class="fas fa-lightbulb"></i><span>Sáng tạo</span></div>
+          <div class="value-item"><i class="fas fa-hands-helping"></i><span>Trách nhiệm</span></div>
+          <div class="value-item"><i class="fas fa-star"></i><span>Xuất sắc</span></div>
+        </div>
+        <a href="pages/gioi-thieu.html" class="btn btn--primary mt-4">Tìm hiểu thêm về trường <i class="fas fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- THƯ VIỆN ẢNH                             -->
+  <!-- ══════════════════════════════════════════ -->
+  <section class="gallery-section section" id="gallerySec">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Hình ảnh</span>
+        <h2 class="section-title">Thư Viện Ảnh Hoạt Động</h2>
+        <p class="section-sub">Những khoảnh khắc đáng nhớ tại Trường Tiểu Học Mỹ Cẩm</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="gallery-item gallery-item--large">
+          <div class="img-placeholder"><i class="fas fa-image"></i></div>
+          <div class="gallery-overlay"><span>Lễ Khai Giảng 2024</span></div>
+        </div>
+        <div class="gallery-item">
+          <div class="img-placeholder"><i class="fas fa-image"></i></div>
+          <div class="gallery-overlay"><span>Hội Trại 26/3</span></div>
+        </div>
+        <div class="gallery-item">
+          <div class="img-placeholder"><i class="fas fa-image"></i></div>
+          <div class="gallery-overlay"><span>Hội Khỏe Phù Đổng</span></div>
+        </div>
+        <div class="gallery-item">
+          <div class="img-placeholder"><i class="fas fa-image"></i></div>
+          <div class="gallery-overlay"><span>Tiết học STEM</span></div>
+        </div>
+        <div class="gallery-item gallery-item--tall">
+          <div class="img-placeholder"><i class="fas fa-image"></i></div>
+          <div class="gallery-overlay"><span>Ngoại Khóa Xanh</span></div>
+        </div>
+        <div class="gallery-item">
+          <div class="img-placeholder"><i class="fas fa-image"></i></div>
+          <div class="gallery-overlay"><span>Ngày Nhà Giáo 20/11</span></div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="pages/thu-vien-anh.html" class="btn btn--outline-dark">Xem toàn bộ thư viện ảnh <i class="fas fa-images"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- LIÊN KẾT NHANH                           -->
+  <!-- ══════════════════════════════════════════ -->
+  <section class="quicklinks-section">
+    <div class="container">
+      <h3>Liên kết hữu ích</h3>
+      <div class="quicklinks-grid">
+        <a href="https://moet.gov.vn" target="_blank" class="qlink">
+          <i class="fas fa-university"></i><span>Bộ GD & ĐT</span>
+        </a>
+        <a href="https://vinhlongedu.vn" target="_blank" class="qlink">
+          <i class="fas fa-building"></i><span>Sở GD Vĩnh Long</span>
+        </a>
+        <a href="#" class="qlink">
+          <i class="fas fa-chart-pie"></i><span>Cổng KBCL Giáo dục</span>
+        </a>
+        <a href="https://vnedu.vn" target="_blank" class="qlink">
+          <i class="fas fa-laptop-code"></i><span>VnEdu</span>
+        </a>
+        <a href="#" class="qlink">
+          <i class="fas fa-book"></i><span>Thư viện số Quốc gia</span>
+        </a>
+        <a href="#" class="qlink">
+          <i class="fas fa-shield-alt"></i><span>Cổng DVCTT Vĩnh Long</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- BẢN ĐỒ VỊ TRÍ TRƯỜNG (Full-width)        -->
+  <!-- ══════════════════════════════════════════ -->
+  <section class="map-section">
+    <div class="map-section__header">
+      <div class="container map-section__info">
+        <div class="map-info-text">
+          <h3><i class="fas fa-map-marker-alt"></i> Địa chỉ trường</h3>
+          <p>Trường Tiểu học Mỹ Cẩm, xã Càng Long, huyện Càng Long, tỉnh Vĩnh Long</p>
+          <div class="map-info-badges">
+            <span><i class="fas fa-phone-alt"></i> (0235) 123 456</span>
+            <span><i class="fas fa-envelope"></i> thmycam@vinhlongedu.vn</span>
+            <span><i class="fas fa-clock"></i> Thứ 2 – Thứ 6: 7:00 – 17:00</span>
+          </div>
+        </div>
+        <a
+          href="https://maps.google.com/maps?q=Trường+Tiểu+học+Mỹ+Cẩm,+xã+Càng+Long,+tỉnh+Vĩnh+Long"
+          target="_blank"
+          class="btn btn--primary"
+        >
+          <i class="fas fa-directions"></i> Chỉ đường tới trường
+        </a>
+      </div>
+    </div>
+    <div class="map-section__embed">
+      <iframe
+        src="https://maps.google.com/maps?q=Tr%C6%B0%E1%BB%9Dng+Ti%E1%BB%83u+h%E1%BB%8Dc+M%E1%BB%B9+C%E1%BA%A9m,+x%C3%A3+C%C3%A0ng+Long,+t%E1%BB%89nh+V%C4%A9nh+Long,+Vi%E1%BB%87t+Nam&output=embed&z=15"
+        width="100%"
+        height="420"
+        style="border:0; display:block;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Bản đồ Trường Tiểu học Mỹ Cẩm – Xã Càng Long, Vĩnh Long"
+      ></iframe>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!-- FOOTER                                    -->
+  <!-- ══════════════════════════════════════════ -->
+
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div class="footer__col footer__col--brand">
+        <div class="footer-logo">
+          <i class="fas fa-school"></i>
+          <div>
+            <strong>Tiểu học Mỹ Cẩm</strong>
+            <small>Xã Càng Long – Tỉnh Vĩnh Long</small>
+          </div>
+        </div>
+        <p>Nơi ươm mầm những ước mơ và nuôi dưỡng thế hệ tương lai của vùng đất Vĩnh Long.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" aria-label="Zalo"><i class="fas fa-comment-dots"></i></a>
+        </div>
+      </div>
+
+      <div class="footer__col">
+        <h4>Thông tin trường</h4>
+        <ul>
+          <li><i class="fas fa-map-marker-alt"></i> Xã Càng Long, Huyện Càng Long, Tỉnh Vĩnh Long</li>
+          <li><i class="fas fa-phone-alt"></i> (0235) 123 456</li>
+          <li><i class="fas fa-envelope"></i> thmycam@vinhlongedu.vn</li>
+          <li><i class="fas fa-clock"></i> Thứ 2 – Thứ 6: 7:00 – 17:00</li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4>Liên kết nhanh</h4>
+        <ul>
+          <li><a href="pages/gioi-thieu.html">Giới thiệu trường</a></li>
+          <li><a href="pages/tin-tuc.html">Tin tức & Sự kiện</a></li>
+          <li><a href="pages/kho-tai-lieu.html">Kho Tài liệu số</a></li>
+          <li><a href="pages/tuyen-sinh.html">Thông tin tuyển sinh</a></li>
+          <li><a href="pages/thu-vien-anh.html">Thư viện ảnh</a></li>
+          <li><a href="pages/lien-he.html">Liên hệ</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col footer__col--map">
+        <h4>Bản đồ chỉ đường</h4>
+        <div class="map-embed">
+          <iframe
+            src="https://maps.google.com/maps?q=Tr%C6%B0%E1%BB%9Dng+Ti%E1%BB%83u+h%E1%BB%8Dc+M%E1%BB%B9+C%E1%BA%A9m,+x%C3%A3+C%C3%A0ng+Long,+t%E1%BB%89nh+V%C4%A9nh+Long,+Vi%E1%BB%87t+Nam&output=embed&z=15"
+            width="100%"
+            height="180"
+            style="border:0; border-radius:10px;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Bản đồ Trường Tiểu học Mỹ Cẩm"
+          ></iframe>
+          <a
+            href="https://maps.google.com/maps?q=Trường+Tiểu+học+Mỹ+Cẩm,+xã+Càng+Long,+tỉnh+Vĩnh+Long"
+            target="_blank"
+            class="map-open-link"
+          >
+            <i class="fas fa-external-link-alt"></i> Mở trong Google Maps
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div class="container">
+        <p>© 2025 Trường Tiểu học Mỹ Cẩm – Xã Càng Long, Tỉnh Vĩnh Long · Thiết kế bởi đội CNTT nhà trường</p>
+        <p><a href="#">Chính sách bảo mật</a> · <a href="#">Điều khoản sử dụng</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Nút Back to Top -->
+  <button class="back-to-top" id="backToTop" aria-label="Lên đầu trang"><i class="fas fa-chevron-up"></i></button>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

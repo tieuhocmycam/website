@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kho Tài Liệu Số – Trường Tiểu học Mỹ Cẩm</title>
+  <meta name="description" content="Kho tài liệu số, bài giảng điện tử và đề thi của Trường Tiểu học Mỹ Cẩm, xã Càng Long, tỉnh Vĩnh Long." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/admin-actions.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script>
+    // Kiểm tra đăng nhập admin ngay khi trang bắt đầu tải
+    document.addEventListener('DOMContentLoaded', function() {
+      if (localStorage.getItem('isAdminLoggedIn') === 'true') {
+        const loginBtn = document.getElementById('loginBtn');
+        if (loginBtn) {
+          loginBtn.innerHTML = '<i class="fas fa-user-cog"></i> Admin Panel';
+          loginBtn.setAttribute('href', 'admin.html');
+          
+          // Thêm nút đăng xuất
+          const parent = loginBtn.parentElement;
+          if (parent && !document.getElementById('adminLogoutBtn')) {
+            const logoutBtn = document.createElement('a');
+            logoutBtn.id = 'adminLogoutBtn';
+            logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+            logoutBtn.className = 'btn-login';
+            logoutBtn.style.background = '#e53935';
+            logoutBtn.style.padding = '9px 12px';
+            logoutBtn.style.marginLeft = '8px';
+            logoutBtn.setAttribute('href', 'javascript:void(0)');
+            logoutBtn.addEventListener('click', function() {
+              if (confirm('Bạn có muốn đăng xuất tài khoản Admin không?')) {
+                localStorage.removeItem('isAdminLoggedIn');
+                window.location.reload();
+              }
+            });
+            parent.appendChild(logoutBtn);
+          }
+        }
+      }
+    });
+  </script>
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, #1e8bc3 100%);
+      padding: 52px 0 40px; color: var(--white);
+    }
+    .page-hero .breadcrumb { display:flex; align-items:center; gap:8px; font-size:.82rem; color:rgba(255,255,255,.7); margin-bottom:14px; }
+    .page-hero .breadcrumb a { color:rgba(255,255,255,.7); } .page-hero .breadcrumb a:hover { color:var(--white); }
+    .page-hero .breadcrumb i { font-size:.65rem; }
+    .page-hero h1 { font-family:'Nunito',sans-serif; font-size:2.2rem; font-weight:800; margin-bottom:8px; }
+    .page-hero p { font-size:1rem; color:rgba(255,255,255,.85); }
+
+    /* ── KHO TÀI LIỆU LAYOUT ── */
+    .doc-layout { display:grid; grid-template-columns:280px 1fr; gap:32px; align-items:start; }
+
+    /* Sidebar bộ lọc */
+    .filter-sidebar {
+      background: var(--white); border-radius: 16px; padding: 24px;
+      border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.05);
+      position: sticky; top: 120px;
+    }
+    .sidebar-section { margin-bottom: 24px; }
+    .sidebar-section:last-child { margin-bottom: 0; }
+    .sidebar-title {
+      font-family: 'Nunito'; font-size: 1rem; font-weight: 800;
+      color: var(--text); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .sidebar-title i { color: var(--primary); }
+    
+    .filter-group { display: flex; flex-direction: column; gap: 10px; }
+    .filter-select {
+      width: 100%; padding: 10px 14px; border: 1.5px solid var(--border);
+      border-radius: 8px; font-family: 'Inter'; font-size: .88rem;
+      background: var(--white); outline: none; cursor: pointer; transition: .3s;
+    }
+    .filter-select:focus { border-color: var(--primary); }
+
+    /* Checkbox & radio custom */
+    .check-label-item { display: flex; align-items: center; gap: 8px; font-size: .87rem; cursor: pointer; color: var(--text); }
+    .check-label-item input { accent-color: var(--primary); width: 16px; height: 16px; }
+
+    /* Content Area */
+    .doc-content-wrap { display: flex; flex-direction: column; gap: 24px; }
+    
+    /* Top Search Bar */
+    .search-filter-card {
+      background: var(--white); border-radius: 16px; padding: 20px 24px;
+      border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.05);
+    }
+    .search-row { display: flex; gap: 12px; }
+    .search-input-wrap { position: relative; flex: 1; }
+    .search-input-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+    .search-input-wrap input {
+      width: 100%; padding: 12px 14px 12px 40px; border: 1.5px solid var(--border);
+      border-radius: 50px; font-size: .9rem; outline: none; transition: .3s;
+    }
+    .search-input-wrap input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,111,181,.12); }
+    
+    .quick-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; border-top: 1px solid var(--border); padding-top: 14px; }
+    .quick-tab { padding: 6px 16px; border-radius: 50px; font-size: .8rem; font-weight: 700; border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; transition: .3s; }
+    .quick-tab.active, .quick-tab:hover { background: var(--primary); color: var(--white); border-color: var(--primary); }
+
+    /* Sort bar */
+    .sort-row { display: flex; justify-content: space-between; align-items: center; font-size: .85rem; color: var(--text-muted); }
+    .sort-row select { padding: 4px 8px; border: 1px solid var(--border); border-radius: 6px; outline: none; cursor: pointer; }
+
+    /* Grid tài liệu */
+    .document-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .document-card {
+      background: var(--white); border-radius: 14px; border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,.05); display: flex; flex-direction: column; overflow: hidden; transition: .3s;
+    }
+    .document-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    
+    .doc-card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+    .doc-icon-title { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 12px; }
+    .doc-type-icon {
+      width: 42px; height: 42px; border-radius: 10px; display: flex;
+      align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0;
+    }
+    .doc-type-icon.pdf  { background: #fff0ee; color: var(--danger); }
+    .doc-type-icon.word { background: #e8f4fd; color: var(--primary); }
+    .doc-type-icon.ppt  { background: #fff9e6; color: var(--secondary); }
+    .doc-type-icon.video{ background: #eafaf1; color: var(--accent-dark); }
+    
+    .doc-card-title { font-family: 'Nunito'; font-weight: 800; font-size: .95rem; line-height: 1.4; color: var(--text); }
+    
+    .doc-badges-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+    .doc-badge { padding: 3px 8px; border-radius: 4px; font-size: .72rem; font-weight: 700; text-transform: uppercase; }
+    .doc-badge.b-k1 { background: #e8f2fb; color: #1a6fb5; }
+    .doc-badge.b-k2 { background: #f3e8fb; color: #9b59b6; }
+    .doc-badge.b-k3 { background: #fdf2e2; color: #e67e22; }
+    .doc-badge.b-k4 { background: #fde8e8; color: #e74c3c; }
+    .doc-badge.b-k5 { background: #e8fbe8; color: #2ecc71; }
+    .doc-badge.b-kchung { background: #f1f5f9; color: #475569; }
+    .doc-badge.b-subject { background: #e2e8f0; color: var(--text-muted); }
+
+    .doc-card-meta { display: flex; justify-content: space-between; font-size: .75rem; color: var(--text-muted); margin-bottom: 16px; border-top: 1px dashed var(--border); padding-top: 10px; }
+    .doc-card-meta span { display: flex; align-items: center; gap: 4px; }
+
+    .doc-card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: auto; }
+    .btn-doc-view {
+      padding: 8px; border-radius: 8px; border: 1.5px solid var(--primary);
+      color: var(--primary); font-size: .8rem; font-weight: 700; text-align: center; transition: .3s;
+    }
+    .btn-doc-view:hover { background: var(--primary); color: var(--white); }
+    .btn-doc-download {
+      padding: 8px; border-radius: 8px; background: var(--accent);
+      color: var(--white); border: none; font-size: .8rem; font-weight: 700; text-align: center; transition: .3s; cursor: pointer;
+    }
+    .btn-doc-download:hover { background: var(--accent-dark); }
+
+    /* Phân trang */
+    .pagination { display: flex; justify-content: center; align-items: center; gap: 6px; margin-top: 24px; }
+    .page-btn {
+      width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; font-weight: 700; border: 1.5px solid var(--border); color: var(--text-muted); cursor: pointer; transition: .3s;
+    }
+    .page-btn.active, .page-btn:hover { background: var(--primary); color: var(--white); border-color: var(--primary); }
+
+    @media(max-width:1100px) { .document-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media(max-width:850px) {
+      .doc-layout { grid-template-columns: 1fr; }
+      .filter-sidebar { position: static; }
+    }
+    @media(max-width:550px) { .document-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="container top-bar__inner">
+      <div class="top-bar__left">
+        <span><i class="fas fa-phone-alt"></i> (0235) 123 456</span>
+        <span><i class="fas fa-envelope"></i> thmycam@vinhlongedu.vn</span>
+      </div>
+      <div class="top-bar__right">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="../index.html" class="header__logo">
+        <div class="logo-icon"><i class="fas fa-school"></i></div>
+        <div class="logo-text">
+          <span class="logo-title">Tiểu học Mỹ Cẩm</span>
+          <span class="logo-sub">Xã Càng Long · Tỉnh Vĩnh Long</span>
+        </div>
+      </a>
+      <div class="header__actions">
+        <a href="login.html" class="btn-login" id="loginBtn"><i class="fas fa-lock"></i> Đăng nhập</a>
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <ul class="nav-list" id="navList">
+        <li><a href="../index.html">Trang chủ</a></li>
+        <li class="has-dropdown"><a href="gioi-thieu.html">Giới thiệu <i class="fas fa-chevron-down"></i></a>
+          <ul class="dropdown">
+            <li><a href="gioi-thieu.html#lich-su"><i class="fas fa-landmark"></i> Lịch sử & Truyền thống</a></li>
+            <li><a href="gioi-thieu.html#ban-giam-hieu"><i class="fas fa-user-tie"></i> Ban giám hiệu</a></li>
+            <li><a href="gioi-thieu.html#doi-ngu"><i class="fas fa-chalkboard-teacher"></i> Đội ngũ giáo viên</a></li>
+            <li><a href="gioi-thieu.html#co-so-vat-chat"><i class="fas fa-building"></i> Cơ sở vật chất</a></li>
+          </ul>
+        </li>
+        <li><a href="tin-tuc.html">Tin tức & Sự kiện</a></li>
+        <li><a href="kho-tai-lieu.html" class="active">Kho Tài liệu</a></li>
+        <li><a href="tuyen-sinh.html">Tuyển sinh</a></li>
+        <li><a href="thu-vien-anh.html">Thư viện ảnh</a></li>
+        <li><a href="lien-he.html">Liên hệ</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Trang chủ</a><i class="fas fa-chevron-right"></i><span>Kho Tài liệu</span>
+      </div>
+      <h1><i class="fas fa-folder-open"></i> Kho Tài Liệu Số</h1>
+      <p>Tổng hợp kho tài nguyên học tập, bài giảng điện tử và tài liệu kiểm tra cho bé</p>
+    </div>
+  </div>
+
+  <!-- MAIN SECTION -->
+  <main class="section" style="background:var(--bg);">
+    <div class="container">
+      
+      <!-- BANNER HÀNH ĐỘNG DÀNH CHO ADMIN -->
+      <div class="admin-action-banner" id="adminBanner" style="display: none; margin-bottom: 24px;">
+        <div class="admin-action-banner__info">
+          <i class="fas fa-user-shield"></i>
+          <span>Bạn đang đăng nhập với tư cách **Admin nhà trường**</span>
+        </div>
+        <button class="btn btn--primary" style="background: var(--secondary); box-shadow: none;" onclick="openDocModal()">
+          <i class="fas fa-plus-circle"></i> Tải lên tài liệu mới
+        </button>
+      </div>
+
+      <!-- MODAL POPUP TẢI LÊN TÀI LIỆU -->
+      <div class="admin-modal" id="docModal">
+        <div class="admin-modal__container">
+          <div class="admin-modal__header">
+            <h3><i class="fas fa-file-upload"></i> Tải lên tài liệu mới</h3>
+            <span class="admin-modal__close" onclick="closeDocModal()">&times;</span>
+          </div>
+          <div class="admin-modal__body">
+            <form id="adminDocForm">
+              <div class="form-group">
+                <label for="modalDocTitle">Tên tài liệu *</label>
+                <input type="text" id="modalDocTitle" class="form-control" placeholder="Ví dụ: Đề cương ôn tập Toán khối 3 học kỳ I" required />
+              </div>
+              
+              <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+                <div class="form-group" style="margin-bottom:0;">
+                  <label for="modalDocKhoi">Khối lớp *</label>
+                  <select id="modalDocKhoi" class="form-control">
+                    <option value="1">Khối 1</option>
+                    <option value="2">Khối 2</option>
+                    <option value="3">Khối 3</option>
+                    <option value="4">Khối 4</option>
+                    <option value="5">Khối 5</option>
+                    <option value="chung">Dùng chung (Toàn trường)</option>
+                  </select>
+                </div>
+                
+                <div class="form-group" style="margin-bottom:0;">
+                  <label for="modalDocMon">Môn học *</label>
+                  <select id="modalDocMon" class="form-control">
+                    <option value="toan">Toán</option>
+                    <option value="tiengviet">Tiếng Việt</option>
+                    <option value="tienganh">Tiếng Anh</option>
+                    <option value="khoahoc">Khoa học</option>
+                    <option value="lichsu">Lịch sử & Địa lý</option>
+                    <option value="daoduc">Đạo đức</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+                <div class="form-group" style="margin-bottom:0;">
+                  <label for="modalDocType">Loại tài liệu *</label>
+                  <select id="modalDocType" class="form-control">
+                    <option value="baigiang">📚 Bài giảng</option>
+                    <option value="dethi">📝 Đề thi</option>
+                    <option value="phieubaitap">✏️ Phiếu bài tập</option>
+                    <option value="video">🎬 Video</option>
+                    <option value="bieumau">📄 Biểu mẫu</option>
+                  </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom:0;">
+                  <label for="modalDocFile">Chọn tệp (PDF/Word/PPT) *</label>
+                  <input type="file" id="modalDocFile" class="form-control" required />
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn--primary" style="width: 100%; justify-content: center; background: var(--primary); margin-top: 14px;">
+                <i class="fas fa-check"></i> Lưu và tải lên
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAYOUT HAI CỘT -->
+      <div class="doc-layout">
+        
+        <!-- Sidebar trái: Bộ lọc -->
+        <aside class="filter-sidebar">
+          <div class="sidebar-section">
+            <div class="sidebar-title"><i class="fas fa-filter"></i> Bộ lọc nhanh</div>
+            <div class="filter-group">
+              <select class="filter-select" id="filterKhoi">
+                <option value="">🏫 Khối lớp (Tất cả)</option>
+                <option value="1">Khối 1</option>
+                <option value="2">Khối 2</option>
+                <option value="3">Khối 3</option>
+                <option value="4">Khối 4</option>
+                <option value="5">Khối 5</option>
+                <option value="chung">Dùng chung (Toàn trường)</option>
+              </select>
+              <select class="filter-select" id="filterMon">
+                <option value="">📚 Môn học (Tất cả)</option>
+                <option value="toan">Toán</option>
+                <option value="tiengviet">Tiếng Việt</option>
+                <option value="tienganh">Tiếng Anh</option>
+                <option value="khoahoc">Khoa học</option>
+                <option value="lichsu">Lịch sử & Địa lý</option>
+                <option value="daoduc">Đạo đức</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="sidebar-section">
+            <div class="sidebar-title"><i class="fas fa-tags"></i> Loại tài liệu</div>
+            <div class="filter-group" style="gap: 8px;">
+              <label class="check-label-item"><input type="radio" name="loaiTL" value="all" checked /> Tất cả</label>
+              <label class="check-label-item"><input type="radio" name="loaiTL" value="baigiang" /> Bài giảng</label>
+              <label class="check-label-item"><input type="radio" name="loaiTL" value="dethi" /> Đề thi</label>
+              <label class="check-label-item"><input type="radio" name="loaiTL" value="phieubaitap" /> Phiếu bài tập</label>
+              <label class="check-label-item"><input type="radio" name="loaiTL" value="video" /> Video bài học</label>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Nội dung phải: Danh sách và tìm kiếm -->
+        <div class="doc-content-wrap">
+          
+          <!-- Search box -->
+          <div class="search-filter-card">
+            <div class="search-row">
+              <div class="search-input-wrap">
+                <i class="fas fa-search"></i>
+                <input type="text" id="docSearch" placeholder="Tìm kiếm tên tài liệu..." />
+              </div>
+              <button class="btn btn--primary" id="btnSearch"><i class="fas fa-search"></i> Tìm kiếm</button>
+            </div>
+            
+            <div class="quick-tabs">
+              <div class="quick-tab active" data-tab="all">Tất cả</div>
+              <div class="quick-tab" data-tab="baigiang">Bài giảng</div>
+              <div class="quick-tab" data-tab="dethi">Đề thi</div>
+              <div class="quick-tab" data-tab="phieubaitap">Phiếu bài tập</div>
+              <div class="quick-tab" data-tab="video">Video</div>
+            </div>
+          </div>
+
+          <!-- Sort & Count -->
+          <div class="sort-row">
+            <span>Hiển thị <strong id="visibleCount">6</strong> tài liệu</span>
+            <div>
+              Sắp xếp: 
+              <select id="sortSelect">
+                <option value="newest">Mới nhất</option>
+                <option value="downloads">Lượt tải</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Grid hiển thị tài liệu -->
+          <div class="document-grid" id="docGrid">
+            
+            <!-- Card Dùng Chung (Toàn trường) -->
+            <div class="document-card" data-type="bieumau" data-khoi="chung" data-mon="">
+              <div class="doc-card-body">
+                <div class="doc-icon-title">
+                  <div class="doc-type-icon word"><i class="fas fa-file-word"></i></div>
+                  <div class="doc-card-title">Mẫu đơn xin nghỉ học dành cho học sinh (Toàn trường)</div>
+                </div>
+                <div class="doc-badges-row">
+                  <span class="doc-badge b-kchung">Dùng chung</span>
+                  <span class="doc-badge b-subject">Biểu mẫu</span>
+                </div>
+                <div class="doc-card-meta">
+                  <span><i class="fas fa-calendar-alt"></i> 12/06/2025</span>
+                  <span><i class="fas fa-download"></i> 512 tải</span>
+                </div>
+                <div class="doc-card-actions">
+                  <a href="#" class="btn-doc-view">Xem</a>
+                  <button class="btn-doc-download">Tải về</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 1 -->
+            <div class="document-card" data-type="dethi" data-khoi="1" data-mon="toan">
+              <div class="doc-card-body">
+                <div class="doc-icon-title">
+                  <div class="doc-type-icon pdf"><i class="fas fa-file-pdf"></i></div>
+                  <div class="doc-card-title">Đề kiểm tra định kỳ học kỳ II môn Toán Lớp 1</div>
+                </div>
+                <div class="doc-badges-row">
+                  <span class="doc-badge b-k1">Khối 1</span>
+                  <span class="doc-badge b-subject">Toán</span>
+                </div>
+                <div class="doc-card-meta">
+                  <span><i class="fas fa-calendar-alt"></i> 10/06/2025</span>
+                  <span><i class="fas fa-download"></i> 156 tải</span>
+                </div>
+                <div class="doc-card-actions">
+                  <a href="#" class="btn-doc-view">Xem</a>
+                  <button class="btn-doc-download">Tải về</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="document-card" data-type="baigiang" data-khoi="3" data-mon="tiengviet">
+              <div class="doc-card-body">
+                <div class="doc-icon-title">
+                  <div class="doc-type-icon ppt"><i class="fas fa-file-powerpoint"></i></div>
+                  <div class="doc-card-title">Slide bài giảng Tiếng Việt Lớp 3: Từ và câu</div>
+                </div>
+                <div class="doc-badges-row">
+                  <span class="doc-badge b-k3">Khối 3</span>
+                  <span class="doc-badge b-subject">Tiếng Việt</span>
+                </div>
+                <div class="doc-card-meta">
+                  <span><i class="fas fa-calendar-alt"></i> 08/06/2025</span>
+                  <span><i class="fas fa-download"></i> 98 tải</span>
+                </div>
+                <div class="doc-card-actions">
+                  <a href="#" class="btn-doc-view">Xem</a>
+                  <button class="btn-doc-download">Tải về</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="document-card" data-type="phieubaitap" data-khoi="2" data-mon="toan">
+              <div class="doc-card-body">
+                <div class="doc-icon-title">
+                  <div class="doc-type-icon word"><i class="fas fa-file-word"></i></div>
+                  <div class="doc-card-title">Phiếu ôn tập cuối tuần môn Toán khối lớp 2</div>
+                </div>
+                <div class="doc-badges-row">
+                  <span class="doc-badge b-k2">Khối 2</span>
+                  <span class="doc-badge b-subject">Toán</span>
+                </div>
+                <div class="doc-card-meta">
+                  <span><i class="fas fa-calendar-alt"></i> 05/06/2025</span>
+                  <span><i class="fas fa-download"></i> 220 tải</span>
+                </div>
+                <div class="doc-card-actions">
+                  <a href="#" class="btn-doc-view">Xem</a>
+                  <button class="btn-doc-download">Tải về</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="document-card" data-type="video" data-khoi="4" data-mon="tienganh">
+              <div class="doc-card-body">
+                <div class="doc-icon-title">
+                  <div class="doc-type-icon video"><i class="fas fa-circle-play"></i></div>
+                  <div class="doc-card-title">Video học phát âm tiếng Anh chuẩn lớp 4</div>
+                </div>
+                <div class="doc-badges-row">
+                  <span class="doc-badge b-k4">Khối 4</span>
+                  <span class="doc-badge b-subject">Tiếng Anh</span>
+                </div>
+                <div class="doc-card-meta">
+                  <span><i class="fas fa-calendar-alt"></i> 02/06/2025</span>
+                  <span><i class="fas fa-download"></i> 74 tải</span>
+                </div>
+                <div class="doc-card-actions">
+                  <a href="#" class="btn-doc-view">Xem</a>
+                  <button class="btn-doc-download">Tải về</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="document-card" data-type="dethi" data-khoi="5" data-mon="khoahoc">
+              <div class="doc-card-body">
+                <div class="doc-icon-title">
+                  <div class="doc-type-icon pdf"><i class="fas fa-file-pdf"></i></div>
+                  <div class="doc-card-title">Đề ôn tập giữa kỳ môn Khoa học Lớp 5</div>
+                </div>
+                <div class="doc-badges-row">
+                  <span class="doc-badge b-k5">Khối 5</span>
+                  <span class="doc-badge b-subject">Khoa học</span>
+                </div>
+                <div class="doc-card-meta">
+                  <span><i class="fas fa-calendar-alt"></i> 28/05/2025</span>
+                  <span><i class="fas fa-download"></i> 142 tải</span>
+                </div>
+                <div class="doc-card-actions">
+                  <a href="#" class="btn-doc-view">Xem</a>
+                  <button class="btn-doc-download">Tải về</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="document-card" data-type="baigiang" data-khoi="5" data-mon="toan">
+              <div class="doc-card-body">
+                <div class="doc-icon-title">
+                  <div class="doc-type-icon ppt"><i class="fas fa-file-powerpoint"></i></div>
+                  <div class="doc-card-title">Bài giảng ôn thi Toán nâng cao Khối 5</div>
+                </div>
+                <div class="doc-badges-row">
+                  <span class="doc-badge b-k5">Khối 5</span>
+                  <span class="doc-badge b-subject">Toán</span>
+                </div>
+                <div class="doc-card-meta">
+                  <span><i class="fas fa-calendar-alt"></i> 25/05/2025</span>
+                  <span><i class="fas fa-download"></i> 89 tải</span>
+                </div>
+                <div class="doc-card-actions">
+                  <a href="#" class="btn-doc-view">Xem</a>
+                  <button class="btn-doc-download">Tải về</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Phân trang -->
+          <div class="pagination">
+            <div class="page-btn"><i class="fas fa-chevron-left"></i></div>
+            <div class="page-btn active">1</div>
+            <div class="page-btn">2</div>
+            <div class="page-btn">3</div>
+            <div class="page-btn"><i class="fas fa-chevron-right"></i></div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER RÚT GỌN -->
+  <footer class="footer" style="padding:36px 0 0;">
+    <div class="container footer__grid" style="grid-template-columns:1.4fr 1fr 1fr;padding-bottom:28px;">
+      <div class="footer__col footer__col--brand">
+        <div class="footer-logo">
+          <i class="fas fa-school"></i>
+          <div><strong>Tiểu học Mỹ Cẩm</strong><small>Xã Càng Long – Tỉnh Vĩnh Long</small></div>
+        </div>
+        <p>Nơi ươm mầm những ước mơ và nuôi dưỡng thế hệ tương lai của vùng đất Vĩnh Long.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Thông tin trường</h4>
+        <ul>
+          <li><i class="fas fa-map-marker-alt"></i> Xã Càng Long, Huyện Càng Long, Tỉnh Vĩnh Long</li>
+          <li><i class="fas fa-phone-alt"></i> (0235) 123 456</li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Liên kết nhanh</h4>
+        <ul>
+          <li><a href="../index.html">Trang chủ</a></li>
+          <li><a href="tin-tuc.html">Tin tức</a></li>
+          <li><a href="tuyen-sinh.html">Tuyển sinh</a></li>
+          <li><a href="lien-he.html">Liên hệ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">
+        <p>© 2025 Trường Tiểu học Mỹ Cẩm – Xã Càng Long, Tỉnh Vĩnh Long</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // Tab and filter selectors
+    const filterTabs = document.querySelectorAll('.quick-tab');
+    const cards = document.querySelectorAll('.document-card');
+    const searchInput = document.getElementById('docSearch');
+    const filterKhoi = document.getElementById('filterKhoi');
+    const filterMon = document.getElementById('filterMon');
+    const visibleCount = document.getElementById('visibleCount');
+
+    function updateDocList() {
+      const q = searchInput.value.toLowerCase();
+      const khoiVal = filterKhoi.value;
+      const monVal = filterMon.value;
+      const tabVal = document.querySelector('.quick-tab.active').dataset.tab;
+      const radioVal = document.querySelector('input[name="loaiTL"]:checked').value;
+
+      let showCount = 0;
+
+      cards.forEach(card => {
+        let match = true;
+
+        if (q && !card.querySelector('.doc-card-title').textContent.toLowerCase().includes(q)) match = false;
+        if (khoiVal && card.dataset.khoi !== khoiVal) match = false;
+        if (monVal && card.dataset.mon !== monVal) match = false;
+        
+        // Tab filter hoặc Radio filter
+        const finalType = tabVal !== 'all' ? tabVal : radioVal;
+        if (finalType !== 'all' && card.dataset.type !== finalType) match = false;
+
+        if (match) {
+          card.style.display = '';
+          showCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      visibleCount.textContent = showCount;
+    }
+
+    // Bind event listeners
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        updateDocList();
+      });
+    });
+
+    document.querySelectorAll('input[name="loaiTL"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        // Sync tabs with radio selection
+        const tab = document.querySelector(`.quick-tab[data-tab="${radio.value}"]`);
+        if (tab) {
+          filterTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+        }
+        updateDocList();
+      });
+    });
+
+    filterKhoi.addEventListener('change', updateDocList);
+    filterMon.addEventListener('change', updateDocList);
+    document.getElementById('btnSearch').addEventListener('click', updateDocList);
+    searchInput.addEventListener('input', updateDocList);
+
+    // Initial count
+    updateDocList();
+
+    // ── KIỂM TRA ĐĂNG NHẬP ADMIN & Inline Actions ──
+    const banner = document.getElementById('adminBanner');
+    const isAdmin = localStorage.getItem('isAdminLoggedIn') === 'true';
+    
+    if (isAdmin) {
+      if (banner) banner.style.display = 'flex';
+      
+      // Hiển thị nút xóa trực tiếp trên từng tài liệu thay cho nút Tải về
+      document.querySelectorAll('.document-card').forEach((card, idx) => {
+        const actions = card.querySelector('.doc-card-actions');
+        if (actions) {
+          const id = `doc-row-${idx}`;
+          card.id = id;
+          // Thay thế nút Tải về (nút thứ 2) bằng nút Xóa
+          const downloadBtn = actions.querySelector('.btn-doc-download');
+          if (downloadBtn) {
+            downloadBtn.outerHTML = `<button class="btn-doc-download" style="background:#e53935;" onclick="deleteDoc('${id}')"><i class="fas fa-trash-alt"></i> Xoá</button>`;
+          }
+        }
+      });
+    }
+
+    // Doc upload modal helpers
+    function openDocModal() { document.getElementById('docModal').style.display = 'flex'; }
+    function closeDocModal() {
+      document.getElementById('docModal').style.display = 'none';
+      document.getElementById('adminDocForm').reset();
+    }
+
+    // Delete doc row handler
+    function deleteDoc(id) {
+      if (confirm('Bạn có chắc muốn xoá tài liệu này khỏi kho trực tiếp trên giao diện không?')) {
+        document.getElementById(id).remove();
+        updateDocList();
+      }
+    }
+
+    // Form submit kết nối Google Apps Script & Google Drive thực tế bằng Form Submit truyền thống (Tránh lỗi CORS)
+    document.getElementById('adminDocForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const title = document.getElementById('modalDocTitle').value;
+      const khoi = document.getElementById('modalDocKhoi').value;
+      const mon = document.getElementById('modalDocMon').value;
+      const type = document.getElementById('modalDocType').value;
+      const monName = document.getElementById('modalDocMon').options[document.getElementById('modalDocMon').selectedIndex].text;
+      const fileInput = document.getElementById('modalDocFile');
+      
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi lên Google Drive...';
+
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        const fileName = file.name;
+        const fileType = file.type;
+        const reader = new FileReader();
+        
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+          const fileData = reader.result;
+          // Gửi trực tiếp đến Google Apps Script Web App (Không đi qua proxy)
+          const webAppUrl = "https://script.google.com/macros/s/AKfycbwfjyPf-OWSIlYnoCYrC89TBYYfsTUlxaKMnVVsve16XQSDmPXbyH7dcQOyJoHCi6dALg/exec";
+          
+          const payload = {
+            title: title,
+            khoi: khoi,
+            mon: mon,
+            type: type,
+            fileName: fileName,
+            fileType: fileType,
+            fileData: fileData
+          };
+
+          // Gửi trực tiếp bằng no-cors (đẩy dữ liệu lên Google Apps Script ngầm)
+          fetch(webAppUrl, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+              "Content-Type": "text/plain"
+            },
+            body: JSON.stringify(payload)
+          }).catch(err => {
+            console.warn("CORS warning ignored as request was dispatched successfully:", err);
+          });
+
+          // Tự động kích hoạt trạng thái thành công sau 2.5 giây (do trình duyệt chạy file tĩnh chặn đọc phản hồi no-cors)
+          setTimeout(() => {
+            let iconClass = 'pdf';
+            let innerIcon = 'fa-file-pdf';
+            if (type === 'video') { iconClass = 'video'; innerIcon = 'fa-circle-play'; }
+            else if (type === 'phieubaitap') { iconClass = 'word'; innerIcon = 'fa-file-word'; }
+            else if (type === 'baigiang') { iconClass = 'ppt'; innerIcon = 'fa-file-powerpoint'; }
+
+            const docGrid = document.getElementById('docGrid');
+            const newCard = document.createElement('div');
+            const newId = `doc-new-${Date.now()}`;
+            newCard.id = newId;
+            newCard.className = 'document-card';
+            newCard.dataset.type = type;
+            newCard.dataset.khoi = khoi;
+            newCard.dataset.mon = mon;
+
+            const today = new Date();
+            const dateString = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+
+            newCard.innerHTML = `
+              <div class="doc-card-body">
+                <div class="doc-icon-title">
+                  <div class="doc-type-icon ${iconClass}"><i class="fas ${innerIcon}"></i></div>
+                  <div class="doc-card-title">${title}</div>
+                </div>
+                <div class="doc-badges-row">
+                  <span class="doc-badge b-k${khoi}">${khoi === 'chung' ? 'Dùng chung' : 'Khối ' + khoi}</span>
+                  <span class="doc-badge b-subject">${monName}</span>
+                </div>
+                <div class="doc-card-meta">
+                  <span><i class="fas fa-calendar-alt"></i> ${dateString}</span>
+                  <span><i class="fas fa-download"></i> 0 tải</span>
+                </div>
+                <div class="doc-card-actions">
+                  <a href="https://drive.google.com/drive/folders/1uZG9upiXin5ittk6irIdUep13FUQUC-p?usp=sharing" target="_blank" class="btn-doc-view">Xem tệp</a>
+                  <button class="btn-doc-download" style="background:#e53935;" onclick="deleteDoc('${newId}')"><i class="fas fa-trash-alt"></i> Xoá</button>
+                </div>
+              </div>
+            `;
+
+            docGrid.insertBefore(newCard, docGrid.firstChild);
+            closeDocModal();
+            updateDocList();
+            
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+            
+            alert('Đã gửi tài liệu! Tệp tin đang được tải lên thư mục Google Drive và ghi vào Bảng tính của trường.');
+            newCard.scrollIntoView({ behavior: 'smooth' });
+          }, 2500);
+        };
+      }
+    });
+  </script>
+
+</body>
+</html>

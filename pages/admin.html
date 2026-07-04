@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bảng Điều Khiển Admin – Trường Tiểu học Mỹ Cẩm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --admin-sidebar: #0f2744;
+      --admin-active: #1A6FB5;
+    }
+    body { background: #f1f5f9; display: flex; min-height: 100vh; font-family: 'Inter', sans-serif; }
+    
+    /* ── SIDEBAR ── */
+    .sidebar { width: 260px; background: var(--admin-sidebar); color: var(--white); display: flex; flex-direction: column; flex-shrink: 0; }
+    .sidebar-header { padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 12px; }
+    .sidebar-header i { font-size: 1.6rem; color: var(--secondary); }
+    .sidebar-header h2 { font-family: 'Nunito'; font-size: 1.1rem; font-weight: 800; }
+    .sidebar-menu { padding: 20px 0; flex: 1; }
+    .sidebar-menu li a { display: flex; align-items: center; gap: 12px; padding: 12px 24px; color: rgba(255,255,255,0.7); font-size: .9rem; font-weight: 600; transition: .3s; }
+    .sidebar-menu li a:hover, .sidebar-menu li a.active { color: var(--white); background: var(--admin-active); }
+    
+    /* ── CONTENT AREA ── */
+    .main-content { flex: 1; display: flex; flex-direction: column; overflow-x: hidden; }
+    .topbar { background: var(--white); padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm); }
+    .user-info { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: .9rem; }
+    .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; }
+    
+    .content-body { padding: 32px; flex: 1; }
+    .page-title-wrap { margin-bottom: 24px; }
+    .page-title { font-family: 'Nunito'; font-size: 1.6rem; font-weight: 800; color: var(--text); }
+    .page-subtitle { font-size: .85rem; color: var(--text-muted); }
+
+    /* ── SIMPLE FORM CARD ── */
+    .form-card { background: var(--white); border-radius: 16px; padding: 32px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+    .form-row { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+    
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: .88rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .form-control { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: .9rem; font-family: 'Inter'; transition: .3s; }
+    .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,111,181,0.12); }
+    
+    /* Image Uploader Box */
+    .upload-box { border: 2px dashed var(--border); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: .3s; background: #f8fafc; }
+    .upload-box:hover { border-color: var(--primary); background: var(--primary-light); }
+    .upload-box i { font-size: 2.2rem; color: var(--text-muted); margin-bottom: 10px; }
+    .upload-box p { font-size: .82rem; color: var(--text-muted); font-weight: 600; }
+    .image-preview { display: none; margin-top: 14px; border-radius: 8px; max-height: 150px; width: 100%; object-fit: cover; }
+
+    /* Quick status indicators */
+    .publish-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+    .publish-action { display: flex; gap: 12px; margin-top: 16px; }
+
+    /* ── NEW ARTICLE PREVIEW ── */
+    .preview-section { margin-top: 32px; border-top: 2px dashed var(--border); padding-top: 32px; }
+    .preview-title { font-family: 'Nunito'; font-size: 1.3rem; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: var(--primary); }
+
+    /* ── LIST ARTICLES ── */
+    .article-table-card { background: var(--white); border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); overflow: hidden; margin-top: 32px; }
+    .table-header { padding: 18px 24px; background: #f8fafc; border-bottom: 1px solid var(--border); font-family: 'Nunito'; font-weight: 800; font-size: 1rem; }
+    .table-responsive { width: 100%; overflow-x: auto; }
+    .admin-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .admin-table th, .admin-table td { padding: 14px 24px; font-size: .88rem; border-bottom: 1px solid var(--border); }
+    .admin-table th { font-weight: 700; color: var(--text-muted); background: #f8fafc; }
+    .status-pill { display: inline-block; padding: 4px 10px; border-radius: 50px; font-size: .75rem; font-weight: 700; }
+    .status-pill.published { background: #eafaf1; color: var(--accent-dark); }
+    .action-btn { background: none; border: none; font-size: .9rem; cursor: pointer; padding: 4px 8px; border-radius: 6px; transition: .3s; }
+    .action-btn.edit { color: var(--primary); }
+    .action-btn.edit:hover { background: var(--primary-light); }
+    .action-btn.delete { color: var(--danger); }
+    .action-btn.delete:hover { background: #fff0ee; }
+
+    @media (max-width: 900px) {
+      body { flex-direction: column; }
+      .sidebar { width: 100%; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <i class="fas fa-user-shield"></i>
+      <div>
+        <h2>Admin Mỹ Cẩm</h2>
+        <small style="color: rgba(255,255,255,0.5)">Hệ thống Quản trị Tin</small>
+      </div>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="#" class="active"><i class="fas fa-edit"></i> Đăng Bài Viết Mới</a></li>
+      <li><a href="kho-tai-lieu.html"><i class="fas fa-folder"></i> Quản Lý Tài Liệu</a></li>
+      <li><a href="../index.html"><i class="fas fa-home"></i> Xem Website Trường</a></li>
+      <li><a href="login.html" style="color: #ff7675;"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="topbar">
+      <div style="font-weight: 600; color: var(--text-muted);">Hôm nay: <span id="currentDate">04/07/2026</span></div>
+      <div class="user-info">
+        <span>Chào cô, <strong>Phan Thị Mai</strong> (Ban biên tập)</span>
+        <div class="user-avatar"><i class="fas fa-user"></i></div>
+      </div>
+    </div>
+
+    <div class="content-body">
+      <div class="page-title-wrap">
+        <h1 class="page-title">Viết và Đăng Tin Mới</h1>
+        <p class="page-subtitle">Nhập tiêu đề, chọn ảnh và bấm nút đăng tin để hiển thị ngay trên trang chủ.</p>
+      </div>
+
+      <!-- FORM ĐĂNG TIN ĐƠN GIẢN -->
+      <div class="form-card">
+        <form id="newPostForm">
+          <!-- Lưu trữ ID bài đang sửa (nếu có) -->
+          <input type="hidden" id="editPostId" value="" />
+          
+          <div class="form-row">
+            
+            <!-- Cột trái: Tiêu đề và nội dung -->
+            <div>
+              <div class="form-group">
+                <label for="postTitle">Tiêu đề tin tức (Viết ngắn gọn, rõ nghĩa) *</label>
+                <input type="text" id="postTitle" class="form-control" placeholder="Ví dụ: Lễ đón nhận học sinh Lớp 1 tựu trường" required />
+              </div>
+              
+              <div class="form-group">
+                <label for="postCategory">Chuyên mục tin *</label>
+                <select id="postCategory" class="form-control" style="cursor: pointer;">
+                  <option value="thongbao">📢 Thông báo từ Nhà trường (nghỉ học, họp phụ huynh, tuyển sinh...)</option>
+                  <option value="hoatdong">⭐ Hoạt động phong trào (vui chơi, ngoại khóa, đoàn đội...)</option>
+                  <option value="hoctap">📚 Học tập & Chuyên môn (bài tập, bài giảng điện tử...)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="postContent">Nội dung tin chi tiết *</label>
+                <textarea id="postContent" class="form-control" rows="8" placeholder="Nhập nội dung sự kiện, hoạt động cụ thể tại đây..." required></textarea>
+              </div>
+            </div>
+
+            <!-- Cột phải: Hình ảnh minh họa và đăng bài -->
+            <div>
+              <div class="form-group">
+                <label>Ảnh minh họa (Chỉ cần bấm chọn 1 ảnh đẹp)</label>
+                <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+                  <i class="far fa-image"></i>
+                  <p>Bấm để tải ảnh lên</p>
+                  <span style="font-size: 11px; color: var(--text-muted)">Hỗ trợ: JPG, PNG</span>
+                  <input type="file" id="fileInput" style="display: none;" accept="image/*" />
+                  <img id="previewImage" class="image-preview" src="#" alt="Xem trước ảnh" />
+                </div>
+              </div>
+
+              <div class="publish-box">
+                <label style="font-weight: 700; font-size: .88rem; color: var(--text);">Trạng thái đăng bài</label>
+                <p style="font-size: .8rem; color: var(--text-muted); margin-top: 4px;">Bài viết sẽ hiển thị trực tiếp tại Trang chủ sau khi xuất bản.</p>
+                <div class="publish-action">
+                  <button type="submit" class="btn btn--primary" id="submitButton" style="flex: 1; justify-content: center; box-shadow: 0 4px 10px rgba(26,111,181,0.2);">
+                    <i class="fas fa-paper-plane" id="btnIcon"></i> <span id="btnText">Đăng bài ngay</span>
+                  </button>
+                  <button type="button" class="btn btn--outline-dark" id="cancelEditButton" style="display: none; padding: 12px 20px; font-size: 0.9rem;" onclick="cancelEdit()">
+                    Hủy sửa
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+
+      <!-- XEM TRƯỚC BÀI VIẾT VỪA ĐĂNG (MẪU) -->
+      <div class="preview-section" id="previewSection" style="display: none;">
+        <div class="preview-title"><i class="fas fa-eye"></i> Bài viết vừa được lưu/đăng thành công:</div>
+        <div style="background: var(--white); border-radius: 12px; padding: 24px; border: 1px solid var(--border); display: flex; gap: 20px; align-items: center; max-width: 800px;">
+          <div id="liveImgPreview" style="width: 140px; height: 100px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--white); font-weight: bold;" class="grad-1">
+            <i class="fas fa-image" style="font-size: 2rem;"></i>
+          </div>
+          <div>
+            <span class="status-pill published" style="margin-bottom: 6px;" id="liveCatPreview">Thông báo</span>
+            <h3 id="liveTitlePreview" style="font-family: 'Nunito'; font-size: 1.1rem; font-weight: 800; margin-bottom: 6px;">Tiêu đề</h3>
+            <p id="liveContentPreview" style="font-size: .85rem; color: var(--text-muted); line-height: 1.6;"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- DANH SÁCH BÀI ĐÃ ĐĂNG GẦN ĐÂY -->
+      <div class="article-table-card">
+        <div class="table-header">Danh sách tin đã đăng gần đây</div>
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Tiêu đề bài viết</th>
+                <th>Chuyên mục</th>
+                <th>Người đăng</th>
+                <th>Ngày đăng</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="articleTableBody">
+              <tr id="row-1">
+                <td class="col-title" style="font-weight: 600;">Kế hoạch năm học mới 2025–2026 chính thức được ban hành</td>
+                <td class="col-cat" data-val="thongbao">Thông báo</td>
+                <td>Phan Thị Mai</td>
+                <td>25/06/2025</td>
+                <td><span class="status-pill published">Đã đăng</span></td>
+                <td>
+                  <button class="action-btn edit" title="Sửa bài" onclick="startEdit('row-1')"><i class="fas fa-edit"></i> Sửa</button>
+                  <button class="action-btn delete" title="Xoá bài" onclick="deleteRow('row-1')"><i class="fas fa-trash-alt"></i> Xoá</button>
+                  <span class="full-content" style="display:none;">Ban giám hiệu nhà trường trân trọng thông báo kế hoạch năm học mới 2025–2026. Theo đó, học sinh tựu trường vào ngày 25/8/2025 và khai giảng vào sáng ngày 5/9/2025.</span>
+                </td>
+              </tr>
+              <tr id="row-2">
+                <td class="col-title" style="font-weight: 600;">Lễ tổng kết năm học 2024-2025 rực rỡ sắc màu</td>
+                <td class="col-cat" data-val="hoatdong">Hoạt động</td>
+                <td>Phan Thị Mai</td>
+                <td>28/06/2025</td>
+                <td><span class="status-pill published">Đã đăng</span></td>
+                <td>
+                  <button class="action-btn edit" title="Sửa bài" onclick="startEdit('row-2')"><i class="fas fa-edit"></i> Sửa</button>
+                  <button class="action-btn delete" title="Xoá bài" onclick="deleteRow('row-2')"><i class="fas fa-trash-alt"></i> Xoá</button>
+                  <span class="full-content" style="display:none;">Buổi lễ diễn ra trang trọng với sự tham dự của đông đảo phụ huynh và các em học sinh. Nhà trường trao tặng bằng khen cho những em có thành tích học tập xuất sắc và tri ân các thầy cô giáo tiêu biểu.</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // Set current date
+    const date = new Date();
+    document.getElementById('currentDate').textContent = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+
+    // Handle Image Preview
+    const fileInput = document.getElementById('fileInput');
+    const previewImage = document.getElementById('previewImage');
+    const uploadIcon = document.querySelector('.upload-box i');
+    const uploadText = document.querySelector('.upload-box p');
+    let hasUploadedImage = false;
+
+    fileInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewImage.src = e.target.result;
+          previewImage.style.display = 'block';
+          uploadIcon.style.display = 'none';
+          uploadText.style.display = 'none';
+          hasUploadedImage = true;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Edit Article Logic
+    function startEdit(rowId) {
+      const row = document.getElementById(rowId);
+      const title = row.querySelector('.col-title').textContent;
+      const catVal = row.querySelector('.col-cat').dataset.val;
+      const content = row.querySelector('.full-content').textContent;
+
+      document.getElementById('editPostId').value = rowId;
+      document.getElementById('postTitle').value = title;
+      document.getElementById('postCategory').value = catVal;
+      document.getElementById('postContent').value = content;
+
+      // Update UI button state
+      document.getElementById('btnText').textContent = 'Lưu thay đổi';
+      document.getElementById('btnIcon').className = 'fas fa-save';
+      document.getElementById('cancelEditButton').style.display = 'inline-flex';
+      
+      // Scroll to form
+      document.getElementById('newPostForm').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function cancelEdit() {
+      document.getElementById('editPostId').value = '';
+      document.getElementById('newPostForm').reset();
+      
+      previewImage.style.display = 'none';
+      uploadIcon.style.display = 'block';
+      uploadText.style.display = 'block';
+      hasUploadedImage = false;
+
+      document.getElementById('btnText').textContent = 'Đăng bài ngay';
+      document.getElementById('btnIcon').className = 'fas fa-paper-plane';
+      document.getElementById('cancelEditButton').style.display = 'none';
+    }
+
+    function deleteRow(rowId) {
+      if(confirm('Bạn có chắc chắn muốn xoá bài viết này không?')) {
+        document.getElementById(rowId).remove();
+      }
+    }
+
+    // Handle Submit Post
+    document.getElementById('newPostForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const editId = document.getElementById('editPostId').value;
+      const title = document.getElementById('postTitle').value;
+      const categorySelect = document.getElementById('postCategory');
+      const categoryName = categorySelect.options[categorySelect.selectedIndex].text.split(' ')[1];
+      const categoryVal = categorySelect.value;
+      const content = document.getElementById('postContent').value;
+      
+      // Update Live Preview Box
+      document.getElementById('liveTitlePreview').textContent = title;
+      document.getElementById('liveContentPreview').textContent = content.substring(0, 150) + '...';
+      document.getElementById('liveCatPreview').textContent = categoryName;
+
+      const liveImg = document.getElementById('liveImgPreview');
+      if (hasUploadedImage) {
+        liveImg.style.background = `url(${previewImage.src}) center/cover no-repeat`;
+        liveImg.innerHTML = '';
+      } else {
+        liveImg.className = 'grad-1';
+        liveImg.style.background = '';
+        liveImg.innerHTML = '<i class="fas fa-image" style="font-size: 2rem;"></i>';
+      }
+
+      document.getElementById('previewSection').style.display = 'block';
+      
+      if (editId) {
+        // Mode: Edit existing article
+        const row = document.getElementById(editId);
+        row.querySelector('.col-title').textContent = title;
+        row.querySelector('.col-cat').textContent = categoryName;
+        row.querySelector('.col-cat').dataset.val = categoryVal;
+        row.querySelector('.full-content').textContent = content;
+        
+        cancelEdit();
+      } else {
+        // Mode: Create new article
+        const tableBody = document.getElementById('articleTableBody');
+        const newId = `row-${Date.now()}`;
+        const newRow = document.createElement('tr');
+        newRow.id = newId;
+        
+        const formattedDate = document.getElementById('currentDate').textContent;
+        newRow.innerHTML = `
+          <td class="col-title" style="font-weight: 600;">${title}</td>
+          <td class="col-cat" data-val="${categoryVal}">${categoryName}</td>
+          <td>Phan Thị Mai</td>
+          <td>${formattedDate}</td>
+          <td><span class="status-pill published">Đã đăng</span></td>
+          <td>
+            <button class="action-btn edit" title="Sửa bài" onclick="startEdit('${newId}')"><i class="fas fa-edit"></i> Sửa</button>
+            <button class="action-btn delete" title="Xoá bài" onclick="deleteRow('${newId}')"><i class="fas fa-trash-alt"></i> Xoá</button>
+            <span class="full-content" style="display:none;">${content}</span>
+          </td>
+        `;
+        tableBody.insertBefore(newRow, tableBody.firstChild);
+
+        // Reset form
+        document.getElementById('newPostForm').reset();
+        previewImage.style.display = 'none';
+        uploadIcon.style.display = 'block';
+        uploadText.style.display = 'block';
+        hasUploadedImage = false;
+      }
+
+      // Scroll view to live preview
+      document.getElementById('previewSection').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
+

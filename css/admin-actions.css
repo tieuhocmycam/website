@@ -1,0 +1,104 @@
+/* ══════════════════════════════════════════════════
+   TH MỸ CẨM – Admin Action Styles
+   ══════════════════════════════════════════════════ */
+
+/* Nút Admin nổi bật trên các trang con */
+.admin-action-banner {
+  background: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+  animation: slideDownAdmin .4s ease;
+}
+@keyframes slideDownAdmin {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.admin-action-banner__info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #856404;
+  font-size: .88rem;
+  font-weight: 600;
+}
+.admin-action-banner__info i {
+  font-size: 1.2rem;
+}
+.admin-action-banner .btn {
+  padding: 8px 18px;
+  font-size: .82rem;
+}
+
+/* Modal Popup Form Nhập Bài */
+.admin-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 39, 68, 0.85);
+  z-index: 99999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(5px);
+  animation: fadeInAdmin .3s ease;
+}
+@keyframes fadeInAdmin {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.admin-modal__container {
+  background: var(--white);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: scaleUpAdmin .3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes scaleUpAdmin {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.admin-modal__header {
+  background: var(--primary);
+  color: var(--white);
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.admin-modal__header h3 {
+  font-family: 'Nunito';
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+.admin-modal__close {
+  color: var(--white);
+  font-size: 1.4rem;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: .3s;
+}
+.admin-modal__close:hover {
+  opacity: 1;
+}
+.admin-modal__body {
+  padding: 24px 28px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+/* Nhãn chú thích dễ hiểu */
+.admin-helper-text {
+  display: block;
+  font-size: .78rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}

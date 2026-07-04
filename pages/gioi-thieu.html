@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Giới Thiệu – Trường Tiểu học Mỹ Cẩm</title>
+  <meta name="description" content="Lịch sử, sứ mệnh, đội ngũ giáo viên và cơ sở vật chất của Trường Tiểu học Mỹ Cẩm, xã Càng Long, tỉnh Vĩnh Long." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script>
+    // Kiểm tra đăng nhập admin ngay khi trang bắt đầu tải
+    document.addEventListener('DOMContentLoaded', function() {
+      if (localStorage.getItem('isAdminLoggedIn') === 'true') {
+        const loginBtn = document.getElementById('loginBtn');
+        if (loginBtn) {
+          loginBtn.innerHTML = '<i class="fas fa-user-cog"></i> Admin Panel';
+          loginBtn.setAttribute('href', 'admin.html');
+          
+          // Thêm nút đăng xuất
+          const parent = loginBtn.parentElement;
+          if (parent && !document.getElementById('adminLogoutBtn')) {
+            const logoutBtn = document.createElement('a');
+            logoutBtn.id = 'adminLogoutBtn';
+            logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i>';
+            logoutBtn.className = 'btn-login';
+            logoutBtn.style.background = '#e53935';
+            logoutBtn.style.padding = '9px 12px';
+            logoutBtn.style.marginLeft = '8px';
+            logoutBtn.setAttribute('href', 'javascript:void(0)');
+            logoutBtn.addEventListener('click', function() {
+              if (confirm('Bạn có muốn đăng xuất tài khoản Admin không?')) {
+                localStorage.removeItem('isAdminLoggedIn');
+                window.location.reload();
+              }
+            });
+            parent.appendChild(logoutBtn);
+          }
+        }
+      }
+    });
+  </script>
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero { background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 60%,#1e8bc3 100%); padding:52px 0 40px; color:var(--white); }
+    .page-hero .breadcrumb { display:flex; align-items:center; gap:8px; font-size:.82rem; color:rgba(255,255,255,.7); margin-bottom:14px; }
+    .page-hero .breadcrumb a { color:rgba(255,255,255,.7); } .page-hero .breadcrumb a:hover { color:var(--white); }
+    .page-hero .breadcrumb i { font-size:.65rem; }
+    .page-hero h1 { font-family:'Nunito',sans-serif; font-size:2.2rem; font-weight:800; margin-bottom:8px; }
+    .page-hero p { font-size:1rem; color:rgba(255,255,255,.85); }
+
+    /* ── SIDE NAV ── */
+    .about-layout { display:grid; grid-template-columns:240px 1fr; gap:40px; align-items:start; }
+    .side-nav { background:var(--white); border-radius:14px; border:1px solid var(--border); overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,.06); position:sticky; top:120px; }
+    .side-nav__title { padding:14px 18px; background:var(--primary); color:var(--white); font-family:'Nunito'; font-weight:800; font-size:.95rem; }
+    .side-nav ul { padding:8px 0; }
+    .side-nav ul li a {
+      display:flex; align-items:center; gap:10px; padding:11px 18px;
+      font-size:.87rem; font-weight:600; color:var(--text);
+      border-left:3px solid transparent; transition:.3s;
+    }
+    .side-nav ul li a:hover, .side-nav ul li a.active {
+      color:var(--primary); background:var(--primary-light); border-left-color:var(--primary);
+    }
+    .side-nav ul li a i { color:var(--primary); width:16px; text-align:center; }
+
+    /* ── CONTENT SECTIONS ── */
+    .content-section { margin-bottom:60px; }
+    .content-section:last-child { margin-bottom:0; }
+    .section-divider { height:3px; width:60px; background:linear-gradient(90deg,var(--primary),var(--accent)); border-radius:3px; margin:12px 0 24px; }
+
+    /* ── HISTORY TIMELINE ── */
+    .history-timeline { position:relative; padding-left:36px; }
+    .history-timeline::before { content:''; position:absolute; left:12px; top:0; bottom:0; width:2px; background:linear-gradient(180deg,var(--primary),var(--accent)); border-radius:1px; }
+    .history-item { position:relative; margin-bottom:28px; }
+    .history-item::before {
+      content:''; position:absolute; left:-30px; top:6px;
+      width:14px; height:14px; border-radius:50%;
+      background:var(--white); border:3px solid var(--primary);
+    }
+    .history-item:hover::before { background:var(--primary); }
+    .history-year { font-family:'Nunito'; font-size:.82rem; font-weight:800; color:var(--primary); margin-bottom:4px; }
+    .history-item h4 { font-family:'Nunito'; font-size:1rem; font-weight:700; margin-bottom:6px; }
+    .history-item p { font-size:.87rem; color:var(--text-muted); line-height:1.7; }
+
+    /* ── MISSION CARDS ── */
+    .mission-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .mission-card {
+      padding:28px 22px; border-radius:14px; text-align:center;
+      border:1px solid var(--border); transition:.3s; background:var(--white);
+    }
+    .mission-card:hover { box-shadow:0 8px 24px rgba(26,111,181,.12); transform:translateY(-4px); }
+    .mission-card .icon { font-size:2.2rem; margin-bottom:14px; display:block; }
+    .mission-card h4 { font-family:'Nunito'; font-size:1.05rem; font-weight:800; margin-bottom:10px; }
+    .mission-card p { font-size:.85rem; color:var(--text-muted); line-height:1.7; }
+    .mission-card--blue  { border-top:4px solid var(--primary); }
+    .mission-card--green { border-top:4px solid var(--accent); }
+    .mission-card--orange{ border-top:4px solid var(--secondary); }
+
+    /* ── TEACHER CARDS ── */
+    .teachers-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+    .teacher-card {
+      background:var(--white); border-radius:14px; overflow:hidden;
+      border:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,.06);
+      text-align:center; transition:.3s;
+    }
+    .teacher-card:hover { box-shadow:0 8px 24px rgba(26,111,181,.12); transform:translateY(-4px); }
+    .teacher-avatar {
+      height:140px; background:linear-gradient(135deg,var(--primary-light),#d0e8f9);
+      display:flex; align-items:center; justify-content:center;
+      font-size:3rem; color:var(--primary); opacity:.5;
+    }
+    .teacher-card__body { padding:16px; }
+    .teacher-card__body h4 { font-family:'Nunito'; font-size:.95rem; font-weight:800; margin-bottom:4px; }
+    .teacher-card__body .role { font-size:.78rem; color:var(--primary); font-weight:700; margin-bottom:6px; }
+    .teacher-card__body .subject { font-size:.78rem; color:var(--text-muted); }
+    .teacher-card--bgh .teacher-avatar { background:linear-gradient(135deg,#e8f4fd,#c3d9f5); }
+    .teacher-card--bgh h4 { color:var(--primary); }
+
+    /* ── FACILITIES ── */
+    .facilities-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+    .facility-card {
+      background:var(--white); border-radius:14px; overflow:hidden;
+      border:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,.06); transition:.3s;
+    }
+    .facility-card:hover { box-shadow:0 8px 24px rgba(26,111,181,.12); transform:translateY(-4px); }
+    .facility-img { height:160px; background:linear-gradient(135deg,var(--primary-light),#d0e8f9); display:flex; align-items:center; justify-content:center; font-size:3rem; color:var(--primary); opacity:.4; }
+    .facility-card__body { padding:16px; }
+    .facility-card__body h4 { font-family:'Nunito'; font-size:.95rem; font-weight:800; margin-bottom:6px; }
+    .facility-card__body p { font-size:.82rem; color:var(--text-muted); line-height:1.6; }
+
+    /* ── ACHIEVEMENTS ── */
+    .achievements-row { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .achievement-item {
+      text-align:center; padding:24px 16px; background:var(--white);
+      border-radius:14px; border:1px solid var(--border); transition:.3s;
+    }
+    .achievement-item:hover { border-color:var(--secondary); box-shadow:0 4px 14px rgba(245,166,35,.2); }
+    .achievement-item .num { font-family:'Nunito'; font-size:2.4rem; font-weight:900; color:var(--primary); }
+    .achievement-item .unit { font-size:.78rem; color:var(--text-muted); font-weight:600; }
+    .achievement-item p { font-size:.82rem; color:var(--text-muted); margin-top:4px; }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1024px) {
+      .about-layout { grid-template-columns:1fr; }
+      .side-nav { position:static; display:flex; overflow-x:auto; border-radius:12px; }
+      .side-nav ul { display:flex; padding:8px; white-space:nowrap; }
+      .side-nav ul li a { padding:8px 14px; border-left:none; border-bottom:3px solid transparent; }
+      .side-nav ul li a.active, .side-nav ul li a:hover { border-bottom-color:var(--primary); border-left:none; }
+      .teachers-grid { grid-template-columns:repeat(2,1fr); }
+      .achievements-row { grid-template-columns:repeat(2,1fr); }
+    }
+    @media(max-width:768px) {
+      .mission-grid { grid-template-columns:1fr; }
+      .facilities-grid { grid-template-columns:1fr; }
+      .page-hero h1 { font-size:1.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="container top-bar__inner">
+      <div class="top-bar__left">
+        <span><i class="fas fa-phone-alt"></i> (0235) 123 456</span>
+        <span><i class="fas fa-envelope"></i> thmycam@vinhlongedu.vn</span>
+        <span><i class="fas fa-clock"></i> Thứ 2 – Thứ 6: 7:00 – 17:00</span>
+      </div>
+      <div class="top-bar__right">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="../index.html" class="header__logo">
+        <div class="logo-icon"><i class="fas fa-school"></i></div>
+        <div class="logo-text">
+          <span class="logo-title">Tiểu học Mỹ Cẩm</span>
+          <span class="logo-sub">Xã Càng Long · Tỉnh Vĩnh Long</span>
+        </div>
+      </a>
+      <div class="header__actions">
+        <div class="search-box"><input type="text" placeholder="Tìm kiếm…" /><button><i class="fas fa-search"></i></button></div>
+        <a href="login.html" class="btn-login" id="loginBtn"><i class="fas fa-lock"></i> Đăng nhập</a>
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <ul class="nav-list" id="navList">
+        <li><a href="../index.html">Trang chủ</a></li>
+        <li class="has-dropdown"><a href="gioi-thieu.html" class="active">Giới thiệu <i class="fas fa-chevron-down"></i></a>
+          <ul class="dropdown">
+            <li><a href="#lich-su"><i class="fas fa-landmark"></i> Lịch sử & Truyền thống</a></li>
+            <li><a href="#ban-giam-hieu"><i class="fas fa-user-tie"></i> Ban giám hiệu</a></li>
+            <li><a href="#doi-ngu"><i class="fas fa-chalkboard-teacher"></i> Đội ngũ giáo viên</a></li>
+            <li><a href="#co-so-vat-chat"><i class="fas fa-building"></i> Cơ sở vật chất</a></li>
+          </ul>
+        </li>
+        <li><a href="tin-tuc.html">Tin tức & Sự kiện</a></li>
+        <li><a href="kho-tai-lieu.html">Kho Tài liệu</a></li>
+        <li><a href="tuyen-sinh.html">Tuyển sinh</a></li>
+        <li><a href="thu-vien-anh.html">Thư viện ảnh</a></li>
+        <li><a href="lien-he.html">Liên hệ</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Trang chủ</a><i class="fas fa-chevron-right"></i><span>Giới thiệu</span>
+      </div>
+      <h1><i class="fas fa-school"></i> Giới Thiệu Nhà Trường</h1>
+      <p>Tìm hiểu về lịch sử, sứ mệnh và đội ngũ của Trường Tiểu học Mỹ Cẩm</p>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="section" style="background:var(--bg);">
+    <div class="container">
+      <div class="about-layout">
+
+        <!-- Sidebar nav -->
+        <nav class="side-nav" aria-label="Điều hướng trang Giới thiệu">
+          <div class="side-nav__title"><i class="fas fa-list"></i> Nội dung</div>
+          <ul>
+            <li><a href="#lich-su" class="active"><i class="fas fa-landmark"></i> Lịch sử & Truyền thống</a></li>
+            <li><a href="#su-menh"><i class="fas fa-bullseye"></i> Sứ mệnh & Tầm nhìn</a></li>
+            <li><a href="#ban-giam-hieu"><i class="fas fa-user-tie"></i> Ban Giám Hiệu</a></li>
+            <li><a href="#doi-ngu"><i class="fas fa-chalkboard-teacher"></i> Đội ngũ giáo viên</a></li>
+            <li><a href="#co-so-vat-chat"><i class="fas fa-building"></i> Cơ sở vật chất</a></li>
+            <li><a href="#thanh-tich"><i class="fas fa-trophy"></i> Thành tích nổi bật</a></li>
+          </ul>
+        </nav>
+
+        <!-- Main content -->
+        <div>
+
+          <!-- LỊCH SỬ -->
+          <section class="content-section fade-up" id="lich-su">
+            <h2 style="font-family:'Nunito';font-size:1.7rem;font-weight:800;">Lịch Sử & Truyền Thống</h2>
+            <div class="section-divider"></div>
+            <p style="color:var(--text-muted);line-height:1.8;margin-bottom:28px;">Trường Tiểu học Mỹ Cẩm được thành lập và phát triển trên mảnh đất xã Càng Long, gắn liền với sự phát triển giáo dục của địa phương qua nhiều thập kỷ. Trải qua hơn 25 năm hình thành và phát triển, nhà trường đã không ngừng đổi mới, nâng cao chất lượng giảng dạy và trở thành một trong những trường tiểu học uy tín của huyện Càng Long, tỉnh Vĩnh Long.</p>
+
+            <div class="history-timeline">
+              <div class="history-item fade-up">
+                <div class="history-year">📅 Năm 2000</div>
+                <h4>Thành lập trường</h4>
+                <p>Trường Tiểu học Mỹ Cẩm chính thức được thành lập theo Quyết định của UBND huyện Càng Long. Năm học đầu tiên có 12 lớp với hơn 380 học sinh và 18 giáo viên.</p>
+              </div>
+              <div class="history-item fade-up">
+                <div class="history-year">📅 Năm 2008</div>
+                <h4>Xây dựng cơ sở vật chất mới</h4>
+                <p>Được đầu tư xây mới dãy phòng học 2 tầng khang trang, thư viện và phòng máy tính đầu tiên, tạo bước chuyển quan trọng trong công tác dạy và học.</p>
+              </div>
+              <div class="history-item fade-up">
+                <div class="history-year">📅 Năm 2015</div>
+                <h4>Đạt chuẩn Quốc gia mức độ 1</h4>
+                <p>Nhà trường được UBND tỉnh Vĩnh Long công nhận đạt chuẩn Quốc gia mức độ 1, khẳng định chất lượng giáo dục toàn diện của đội ngũ thầy cô và học sinh.</p>
+              </div>
+              <div class="history-item fade-up">
+                <div class="history-year">📅 Năm 2020</div>
+                <h4>Kỷ niệm 20 năm thành lập</h4>
+                <p>Lễ kỷ niệm 20 năm thành lập được tổ chức trọng thể. Nhà trường đón nhận Bằng khen của Bộ GD&ĐT cho tập thể xuất sắc trong phong trào đổi mới giáo dục.</p>
+              </div>
+              <div class="history-item fade-up">
+                <div class="history-year">📅 Năm 2024–2025</div>
+                <h4>Chuyển đổi số – Kho tài liệu số hóa</h4>
+                <p>Nhà trường triển khai hệ thống website kênh truyền thông và kho tài liệu số, đưa hơn 500 tài liệu học tập lên nền tảng trực tuyến phục vụ giáo viên, học sinh và phụ huynh.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- SỨ MỆNH -->
+          <section class="content-section fade-up" id="su-menh">
+            <h2 style="font-family:'Nunito';font-size:1.7rem;font-weight:800;">Sứ Mệnh & Tầm Nhìn</h2>
+            <div class="section-divider"></div>
+            <div class="mission-grid">
+              <div class="mission-card mission-card--blue fade-up">
+                <span class="icon">🎯</span>
+                <h4>Sứ mệnh</h4>
+                <p>Cung cấp môi trường học tập an toàn, thân thiện và đầy yêu thương, giúp mỗi học sinh phát triển toàn diện về trí tuệ, thể chất và đạo đức.</p>
+              </div>
+              <div class="mission-card mission-card--green fade-up">
+                <span class="icon">🔭</span>
+                <h4>Tầm nhìn</h4>
+                <p>Trở thành trường tiểu học hàng đầu huyện Càng Long về chất lượng giáo dục, đào tạo thế hệ công dân có năng lực, phẩm chất và trách nhiệm với cộng đồng.</p>
+              </div>
+              <div class="mission-card mission-card--orange fade-up">
+                <span class="icon">💎</span>
+                <h4>Giá trị cốt lõi</h4>
+                <p><strong>Yêu thương · Sáng tạo · Trách nhiệm · Xuất sắc</strong> — Bốn giá trị nền tảng định hướng mọi hoạt động của nhà trường.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- BAN GIÁM HIỆU -->
+          <section class="content-section fade-up" id="ban-giam-hieu">
+            <h2 style="font-family:'Nunito';font-size:1.7rem;font-weight:800;">Ban Giám Hiệu</h2>
+            <div class="section-divider"></div>
+            <div class="teachers-grid" style="grid-template-columns:repeat(3,1fr);">
+              <div class="teacher-card teacher-card--bgh fade-up">
+                <div class="teacher-avatar"><i class="fas fa-user-tie"></i></div>
+                <div class="teacher-card__body">
+                  <h4>Thầy Nguyễn Văn An</h4>
+                  <div class="role">Hiệu trưởng</div>
+                  <div class="subject">Thạc sĩ Giáo dục – 20 năm kinh nghiệm</div>
+                </div>
+              </div>
+              <div class="teacher-card teacher-card--bgh fade-up">
+                <div class="teacher-avatar"><i class="fas fa-user-tie"></i></div>
+                <div class="teacher-card__body">
+                  <h4>Cô Trần Thị Bình</h4>
+                  <div class="role">Phó Hiệu trưởng – Chuyên môn</div>
+                  <div class="subject">Cử nhân Giáo dục Tiểu học – 15 năm</div>
+                </div>
+              </div>
+              <div class="teacher-card teacher-card--bgh fade-up">
+                <div class="teacher-avatar"><i class="fas fa-user-tie"></i></div>
+                <div class="teacher-card__body">
+                  <h4>Thầy Lê Minh Cường</h4>
+                  <div class="role">Phó Hiệu trưởng – Cơ sở vật chất</div>
+                  <div class="subject">Cử nhân Quản lý Giáo dục – 12 năm</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ĐỘI NGŨ GIÁO VIÊN -->
+          <section class="content-section fade-up" id="doi-ngu">
+            <h2 style="font-family:'Nunito';font-size:1.7rem;font-weight:800;">Đội Ngũ Giáo Viên</h2>
+            <div class="section-divider"></div>
+            <p style="color:var(--text-muted);margin-bottom:24px;">Đội ngũ 62 cán bộ giáo viên tâm huyết, 100% đạt chuẩn trình độ đào tạo, trong đó có 28 giáo viên đạt trên chuẩn.</p>
+            <div class="teachers-grid">
+              <div class="teacher-card fade-up">
+                <div class="teacher-avatar"><i class="fas fa-user"></i></div>
+                <div class="teacher-card__body">
+                  <h4>Cô Phạm Thị Dung</h4>
+                  <div class="role">Giáo viên chủ nhiệm</div>
+                  <div class="subject">Khối 1 – Tiếng Việt, Toán</div>
+                </div>
+              </div>
+              <div class="teacher-card fade-up">
+                <div class="teacher-avatar"><i class="fas fa-user"></i></div>
+                <div class="teacher-card__body">
+                  <h4>Thầy Nguyễn Văn Em</h4>
+                  <div class="role">Giáo viên bộ môn</div>
+                  <div class="subject">Thể dục – Toàn trường</div>
+                </div>
+              </div>
+              <div class="teacher-card fade-up">
+                <div class="teacher-avatar"><i class="fas fa-user"></i></div>
+                <div class="teacher-card__body">
+                  <h4>Cô Lý Thị Phượng</h4>
+                  <div class="role">Giáo viên bộ môn</div>
+                  <div class="subject">Tiếng Anh – Khối 3, 4, 5</div>
+                </div>
+              </div>
+              <div class="teacher-card fade-up">
+                <div class="teacher-avatar"><i class="fas fa-user"></i></div>
+                <div class="teacher-card__body">
+                  <h4>Thầy Trần Quang Hải</h4>
+                  <div class="role">Giáo viên chủ nhiệm</div>
+                  <div class="subject">Khối 5 – Toán, Khoa học</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- CƠ SỞ VẬT CHẤT -->
+          <section class="content-section fade-up" id="co-so-vat-chat">
+            <h2 style="font-family:'Nunito';font-size:1.7rem;font-weight:800;">Cơ Sở Vật Chất</h2>
+            <div class="section-divider"></div>
+            <div class="facilities-grid">
+              <div class="facility-card fade-up">
+                <div class="facility-img"><i class="fas fa-chalkboard"></i></div>
+                <div class="facility-card__body">
+                  <h4>25 Phòng học hiện đại</h4>
+                  <p>Phòng học thoáng mát, được trang bị máy chiếu, bảng tương tác và đầy đủ đồ dùng dạy học theo chuẩn quốc gia.</p>
+                </div>
+              </div>
+              <div class="facility-card fade-up">
+                <div class="facility-img"><i class="fas fa-book"></i></div>
+                <div class="facility-card__body">
+                  <h4>Thư viện đạt chuẩn</h4>
+                  <p>Hơn 8.000 đầu sách, báo, tài liệu tham khảo. Thư viện thân thiện với góc đọc sách thoải mái cho học sinh.</p>
+                </div>
+              </div>
+              <div class="facility-card fade-up">
+                <div class="facility-img"><i class="fas fa-laptop"></i></div>
+                <div class="facility-card__body">
+                  <h4>Phòng máy tính</h4>
+                  <p>40 máy tính kết nối Internet tốc độ cao, phục vụ học sinh học Tin học và khai thác tài liệu số.</p>
+                </div>
+              </div>
+              <div class="facility-card fade-up">
+                <div class="facility-img"><i class="fas fa-futbol"></i></div>
+                <div class="facility-card__body">
+                  <h4>Sân thể dục đa năng</h4>
+                  <p>Sân bóng đá, bóng rổ, cầu lông và khu vực tập thể dục ngoài trời rộng rãi, đảm bảo sức khỏe thể chất cho học sinh.</p>
+                </div>
+              </div>
+              <div class="facility-card fade-up">
+                <div class="facility-img"><i class="fas fa-utensils"></i></div>
+                <div class="facility-card__body">
+                  <h4>Nhà ăn bán trú</h4>
+                  <p>Bếp ăn đạt vệ sinh an toàn thực phẩm, phục vụ hơn 400 học sinh bán trú mỗi ngày với thực đơn đa dạng, đủ dinh dưỡng.</p>
+                </div>
+              </div>
+              <div class="facility-card fade-up">
+                <div class="facility-img"><i class="fas fa-music"></i></div>
+                <div class="facility-card__body">
+                  <h4>Phòng chức năng</h4>
+                  <p>Phòng âm nhạc, mỹ thuật và phòng hoạt động trải nghiệm sáng tạo, giúp học sinh phát triển toàn diện.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- THÀNH TÍCH -->
+          <section class="content-section fade-up" id="thanh-tich">
+            <h2 style="font-family:'Nunito';font-size:1.7rem;font-weight:800;">Thành Tích Nổi Bật</h2>
+            <div class="section-divider"></div>
+            <div class="achievements-row">
+              <div class="achievement-item fade-up"><div class="num">120+</div><div class="unit">học sinh/năm</div><p>Được trao thưởng xuất sắc</p></div>
+              <div class="achievement-item fade-up"><div class="num">35</div><div class="unit">giải tỉnh</div><p>Học sinh giỏi cấp tỉnh</p></div>
+              <div class="achievement-item fade-up"><div class="num">98%</div><div class="unit">tỉ lệ lên lớp</div><p>Tỉ lệ học sinh hoàn thành chương trình</p></div>
+              <div class="achievement-item fade-up"><div class="num">15</div><div class="unit">năm liên tiếp</div><p>Tập thể lao động xuất sắc cấp tỉnh</p></div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" style="padding:36px 0 0;">
+    <div class="container footer__grid" style="grid-template-columns:1.4fr 1fr 1fr;padding-bottom:28px;">
+      <div class="footer__col footer__col--brand">
+        <div class="footer-logo"><i class="fas fa-school"></i><div><strong>Tiểu học Mỹ Cẩm</strong><small>Xã Càng Long – Tỉnh Vĩnh Long</small></div></div>
+        <p>Nơi ươm mầm những ước mơ và nuôi dưỡng thế hệ tương lai của vùng đất Vĩnh Long.</p>
+        <div class="footer-social"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-youtube"></i></a></div>
+      </div>
+      <div class="footer__col">
+        <h4>Thông tin trường</h4>
+        <ul>
+          <li><i class="fas fa-map-marker-alt"></i> Xã Càng Long, Huyện Càng Long, Tỉnh Vĩnh Long</li>
+          <li><i class="fas fa-phone-alt"></i> (0235) 123 456</li>
+          <li><i class="fas fa-envelope"></i> thmycam@vinhlongedu.vn</li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Liên kết nhanh</h4>
+        <ul>
+          <li><a href="../index.html">Trang chủ</a></li>
+          <li><a href="tin-tuc.html">Tin tức & Sự kiện</a></li>
+          <li><a href="kho-tai-lieu.html">Kho Tài liệu số</a></li>
+          <li><a href="lien-he.html">Liên hệ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <p>© 2025 Trường Tiểu học Mỹ Cẩm – Xã Càng Long, Tỉnh Vĩnh Long</p>
+        <p><a href="#">Chính sách bảo mật</a></p>
+      </div>
+    </div>
+  </footer>
+  <button class="back-to-top" id="backToTop"><i class="fas fa-chevron-up"></i></button>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // Sidebar active link on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const sideLinks = document.querySelectorAll('.side-nav ul li a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 160) current = s.id; });
+      sideLinks.forEach(l => {
+        l.classList.remove('active');
+        if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

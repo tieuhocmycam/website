@@ -1,0 +1,20 @@
+HƯỚNG DẪN THƯ MỤC IMAGES
+==========================
+
+Đặt ảnh thật của trường vào đây với tên tương ứng:
+
+📸 HERO SLIDER (Trang chủ):
+  - slide1.jpg  → Ảnh lễ khai giảng hoặc ảnh toàn cảnh trường
+  - slide2.jpg  → Ảnh học sinh học tập trong lớp
+  - slide3.jpg  → Ảnh hoạt động ngoại khóa, lễ tổng kết
+
+📐 Kích thước tối ưu:
+  - Slide ảnh: 1920 x 680 px
+  - Ảnh tin tức: 800 x 500 px  
+  - Ảnh gallery: 600 x 400 px (hoặc 600 x 800 px dọc)
+  - Avatar giáo viên: 300 x 300 px
+
+💡 Lưu ý:
+  - Dùng định dạng .jpg hoặc .webp để tải nhanh hơn
+  - Tối ưu dung lượng trước khi đưa lên (dùng tinypng.com)
+  - Đặt tên file không có dấu, không có khoảng trắng

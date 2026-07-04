@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liên Hệ – Trường Tiểu học Mỹ Cẩm</title>
+  <meta name="description" content="Trang thông tin liên hệ chính thức, bản đồ chỉ đường và form phản hồi trực tuyến của Trường Tiểu học Mỹ Cẩm, tỉnh Vĩnh Long." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #6c5ce7 100%);
+      padding: 52px 0 40px; color: var(--white);
+    }
+    .page-hero .breadcrumb { display:flex; align-items:center; gap:8px; font-size:.82rem; color:rgba(255,255,255,.7); margin-bottom:14px; }
+    .page-hero .breadcrumb a { color:rgba(255,255,255,.7); } .page-hero .breadcrumb a:hover { color:var(--white); }
+    .page-hero .breadcrumb i { font-size:.65rem; }
+    .page-hero h1 { font-family:'Nunito',sans-serif; font-size:2.2rem; font-weight:800; margin-bottom:8px; }
+    .page-hero p { font-size:1rem; color:rgba(255,255,255,.85); }
+
+    /* ── LAYOUT ── */
+    .contact-layout { display:grid; grid-template-columns:1fr 1.2fr; gap:40px; align-items:start; }
+
+    /* ── INFO CARDS ── */
+    .info-list { display:flex; flex-direction:column; gap:20px; margin-bottom:28px; }
+    .contact-info-card {
+      background:var(--white); border-radius:14px; padding:20px 24px; border:1px solid var(--border);
+      display:flex; gap:20px; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,.05); transition:.3s;
+    }
+    .contact-info-card:hover { transform:translateY(-2px); box-shadow:var(--shadow); }
+    .info-card-icon {
+      width:48px; height:48px; border-radius:50%; background:var(--primary-light);
+      display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:var(--primary); flex-shrink:0;
+    }
+    .info-card-content h5 { font-family:'Nunito'; font-size:.95rem; font-weight:800; margin-bottom:4px; }
+    .info-card-content p, .info-card-content a { font-size:.87rem; color:var(--text-muted); line-height:1.5; }
+    .info-card-content a:hover { color:var(--primary); text-decoration:underline; }
+
+    /* ── MAP EMBED ── */
+    .map-container { border-radius:14px; overflow:hidden; border:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,.06); line-height:0; }
+
+    /* ── CONTACT FORM ── */
+    .contact-form-card { background:var(--white); border-radius:18px; padding:36px; border:1px solid var(--border); box-shadow:0 4px 20px rgba(0,0,0,.08); }
+    .contact-form-card h3 { font-family:'Nunito'; font-size:1.3rem; font-weight:800; margin-bottom:20px; }
+    .purpose-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; }
+    .purpose-tab { padding:8px 16px; border-radius:50px; font-size:.82rem; font-weight:700; border:1.5px solid var(--border); color:var(--text-muted); cursor:pointer; transition:.3s; }
+    .purpose-tab.active, .purpose-tab:hover { background:var(--primary); color:var(--white); border-color:var(--primary); }
+    
+    .form-group { margin-bottom:18px; }
+    .form-group label { display:block; font-size:.83rem; font-weight:700; color:var(--text); margin-bottom:7px; }
+    .form-control {
+      width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px;
+      font-size:.9rem; font-family:'Inter'; color:var(--text); transition:.3s; background:var(--white);
+    }
+    .form-control:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(26,111,181,.12); }
+    .textarea-counter-wrap { display:flex; justify-content:space-between; align-items:center; margin-top:6px; font-size:.78rem; color:var(--text-muted); }
+    .counter-warn { color:var(--danger); }
+
+    /* ── BGH CONTACT SECTION ── */
+    .bgh-section { margin-top:60px; }
+    .bgh-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; }
+    .bgh-card {
+      background:var(--white); border-radius:14px; padding:24px; border:1px solid var(--border);
+      box-shadow:0 2px 8px rgba(0,0,0,.06); display:flex; flex-direction:column; align-items:center; text-align:center; transition:.3s;
+    }
+    .bgh-card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+    .bgh-avatar { width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg, var(--primary-light), #d0e8f9); display:flex; align-items:center; justify-content:center; font-size:1.8rem; color:var(--primary); margin-bottom:14px; }
+    .bgh-card h4 { font-family:'Nunito'; font-size:1rem; font-weight:800; margin-bottom:4px; }
+    .bgh-role { font-size:.8rem; color:var(--primary); font-weight:700; margin-bottom:12px; }
+    .bgh-contact-info { font-size:.82rem; color:var(--text-muted); line-height:1.6; margin-bottom:16px; width:100%; text-align:left; border-top:1px solid var(--border); padding-top:12px; }
+    .bgh-contact-info li { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+    .bgh-contact-info i { color:var(--secondary); width:14px; }
+
+    /* ── SUCCESS OVERLAY ── */
+    .success-overlay {
+      display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:9999;
+      align-items:center; justify-content:center; padding:20px;
+    }
+    .success-box {
+      background:var(--white); border-radius:24px; padding:40px; max-width:400px; width:100%;
+      text-align:center; box-shadow:var(--shadow-lg); animation:scaleUp .3s ease forwards;
+    }
+    @keyframes scaleUp { from{transform:scale(0.8);opacity:0} to{transform:scale(1);opacity:1} }
+    .success-icon { width:72px; height:72px; border-radius:50%; background:#eafaf1; color:var(--accent); font-size:2.2rem; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; }
+    .success-box h4 { font-family:'Nunito'; font-size:1.3rem; font-weight:800; margin-bottom:10px; }
+    .success-box p { font-size:.88rem; color:var(--text-muted); line-height:1.6; margin-bottom:24px; }
+
+    @media(max-width:1024px) {
+      .contact-layout { grid-template-columns:1fr; }
+      .bgh-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="container top-bar__inner">
+      <div class="top-bar__left">
+        <span><i class="fas fa-phone-alt"></i> (0235) 123 456</span>
+        <span><i class="fas fa-envelope"></i> thmycam@vinhlongedu.vn</span>
+      </div>
+      <div class="top-bar__right">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="../index.html" class="header__logo">
+        <div class="logo-icon"><i class="fas fa-school"></i></div>
+        <div class="logo-text">
+          <span class="logo-title">Tiểu học Mỹ Cẩm</span>
+          <span class="logo-sub">Xã Càng Long · Tỉnh Vĩnh Long</span>
+        </div>
+      </a>
+      <div class="header__actions">
+        <a href="login.html" class="btn-login" id="loginBtn"><i class="fas fa-lock"></i> Đăng nhập</a>
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <ul class="nav-list" id="navList">
+        <li><a href="../index.html">Trang chủ</a></li>
+        <li class="has-dropdown"><a href="gioi-thieu.html">Giới thiệu <i class="fas fa-chevron-down"></i></a>
+          <ul class="dropdown">
+            <li><a href="gioi-thieu.html#lich-su"><i class="fas fa-landmark"></i> Lịch sử & Truyền thống</a></li>
+            <li><a href="gioi-thieu.html#ban-giam-hieu"><i class="fas fa-user-tie"></i> Ban giám hiệu</a></li>
+            <li><a href="gioi-thieu.html#doi-ngu"><i class="fas fa-chalkboard-teacher"></i> Đội ngũ giáo viên</a></li>
+            <li><a href="gioi-thieu.html#co-so-vat-chat"><i class="fas fa-building"></i> Cơ sở vật chất</a></li>
+          </ul>
+        </li>
+        <li><a href="tin-tuc.html">Tin tức & Sự kiện</a></li>
+        <li><a href="kho-tai-lieu.html">Kho Tài liệu</a></li>
+        <li><a href="tuyen-sinh.html">Tuyển sinh</a></li>
+        <li><a href="thu-vien-anh.html">Thư viện ảnh</a></li>
+        <li><a href="lien-he.html" class="active">Liên hệ</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Trang chủ</a><i class="fas fa-chevron-right"></i><span>Liên hệ</span>
+      </div>
+      <h1><i class="fas fa-envelope-open-text"></i> Liên Hệ Với Chúng Tôi</h1>
+      <p>Mọi thắc mắc, đóng góp ý kiến vui lòng gửi thông tin phản hồi bên dưới</p>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="section" style="background:var(--bg);">
+    <div class="container">
+      <div class="contact-layout">
+        
+        <!-- Cột trái: Thông tin -->
+        <div>
+          <div class="info-list">
+            <div class="contact-info-card">
+              <div class="info-card-icon"><i class="fas fa-map-marker-alt"></i></div>
+              <div class="info-card-content">
+                <h5>Địa chỉ trường</h5>
+                <p>Xã Càng Long, Huyện Càng Long, Tỉnh Vĩnh Long</p>
+              </div>
+            </div>
+            
+            <div class="contact-info-card">
+              <div class="info-card-icon"><i class="fas fa-phone-alt"></i></div>
+              <div class="info-card-content">
+                <h5>Số điện thoại văn phòng</h5>
+                <a href="tel:0235123456">(0235) 123 456</a>
+              </div>
+            </div>
+
+            <div class="contact-info-card">
+              <div class="info-card-icon"><i class="fas fa-envelope"></i></div>
+              <div class="info-card-content">
+                <h5>Email chính thức</h5>
+                <a href="mailto:thmycam@vinhlongedu.vn">thmycam@vinhlongedu.vn</a>
+              </div>
+            </div>
+
+            <div class="contact-info-card">
+              <div class="info-card-icon"><i class="fas fa-clock"></i></div>
+              <div class="info-card-content">
+                <h5>Thời gian làm việc</h5>
+                <p>Thứ 2 – Thứ 6: 7:00 – 17:00<br/>Thứ 7: 7:00 – 11:30</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bản đồ chỉ đường -->
+          <div class="map-container">
+            <iframe
+              src="https://maps.google.com/maps?q=Tr%C6%B0%E1%BB%9Dng+Ti%E1%BB%83u+h%E1%BB%8Dc+M%E1%BB%B9+C%E1%BA%A9m,+x%C3%A3+C%C3%A0ng+Long,+t%E1%BB%89nh+V%C4%A9nh+Long,+Vi%E1%BB%87t+Nam&output=embed&z=15"
+              width="100%"
+              height="300"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Vị trí trường"
+            ></iframe>
+          </div>
+        </div>
+
+        <!-- Cột phải: Form gửi tin nhắn -->
+        <div class="contact-form-card">
+          <h3>Gửi tin nhắn góp ý / phản hồi</h3>
+          
+          <div class="purpose-tabs" id="purposeTabs">
+            <span class="purpose-tab active" data-purpose="Tuyển sinh">Hỏi tuyển sinh</span>
+            <span class="purpose-tab" data-purpose="Học tập">Học tập & Giáo án</span>
+            <span class="purpose-tab" data-purpose="Góp ý">Góp ý trường</span>
+            <span class="purpose-tab" data-purpose="Khác">Liên hệ khác</span>
+          </div>
+
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="fullName">Họ và tên của bạn *</label>
+              <input type="text" id="fullName" class="form-control" placeholder="Nhập họ và tên..." required />
+            </div>
+
+            <div class="form-group">
+              <label for="phoneNumber">Số điện thoại liên hệ *</label>
+              <input type="tel" id="phoneNumber" class="form-control" placeholder="Nhập số điện thoại..." required />
+            </div>
+
+            <div class="form-group">
+              <label for="emailAddr">Địa chỉ Email (nếu có)</label>
+              <input type="email" id="emailAddr" class="form-control" placeholder="name@example.com" />
+            </div>
+
+            <div class="form-group">
+              <label for="subject">Chủ đề tin nhắn *</label>
+              <input type="text" id="subject" class="form-control" placeholder="Nhập chủ đề..." required />
+            </div>
+
+            <div class="form-group">
+              <label for="message">Nội dung tin nhắn *</label>
+              <textarea id="message" class="form-control" rows="5" placeholder="Nhập nội dung cần gửi đến trường..." style="resize:vertical;" maxlength="500" required></textarea>
+              <div class="textarea-counter-wrap">
+                <span>Vui lòng không nhập quá 500 ký tự.</span>
+                <span id="charCounter">0/500</span>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn--primary" style="width:100%; box-shadow:0 4px 14px rgba(26,111,181,.35);">
+              <i class="fas fa-paper-plane"></i> Gửi tin nhắn phản hồi
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Ban Giám Hiệu liên hệ trực tiếp -->
+      <section class="bgh-section">
+        <div class="section-header">
+          <span class="section-tag">Thành viên quản lý</span>
+          <h2 class="section-title">Đường Dây Nóng Ban Giám Hiệu</h2>
+          <p class="section-sub">Phụ huynh có thể liên hệ trực tiếp đến các thành viên ban giám hiệu khi có việc khẩn cấp</p>
+        </div>
+        <div class="bgh-grid">
+          
+          <div class="bgh-card">
+            <div class="bgh-avatar"><i class="fas fa-user-tie"></i></div>
+            <h4>Thầy Nguyễn Văn An</h4>
+            <span class="bgh-role">Hiệu trưởng trường</span>
+            <ul class="bgh-contact-info">
+              <li><i class="fas fa-phone-alt"></i> Máy lẻ: <strong>101</strong></li>
+              <li><i class="fas fa-envelope"></i> an.nv@vinhlongedu.vn</li>
+              <li><i class="fas fa-user-clock"></i> Tiếp phụ huynh: Sáng T3 & T5</li>
+            </ul>
+            <a href="tel:0235123456" class="btn btn--outline-dark" style="width:100%; justify-content:center; padding:8px 0; font-size:.8rem;"><i class="fas fa-phone-alt"></i> Gọi điện văn phòng</a>
+          </div>
+
+          <div class="bgh-card">
+            <div class="bgh-avatar"><i class="fas fa-user-tie"></i></div>
+            <h4>Cô Trần Thị Bình</h4>
+            <span class="bgh-role">Phó Hiệu trưởng chuyên môn</span>
+            <ul class="bgh-contact-info">
+              <li><i class="fas fa-phone-alt"></i> Máy lẻ: <strong>102</strong></li>
+              <li><i class="fas fa-envelope"></i> binh.tt@vinhlongedu.vn</li>
+              <li><i class="fas fa-user-clock"></i> Tiếp phụ huynh: Chiều T2 & T4</li>
+            </ul>
+            <a href="tel:0235123456" class="btn btn--outline-dark" style="width:100%; justify-content:center; padding:8px 0; font-size:.8rem;"><i class="fas fa-phone-alt"></i> Gọi điện văn phòng</a>
+          </div>
+
+          <div class="bgh-card">
+            <div class="bgh-avatar"><i class="fas fa-user-tie"></i></div>
+            <h4>Thầy Lê Minh Cường</h4>
+            <span class="bgh-role">Phó Hiệu trưởng cơ sở vật chất</span>
+            <ul class="bgh-contact-info">
+              <li><i class="fas fa-phone-alt"></i> Máy lẻ: <strong>103</strong></li>
+              <li><i class="fas fa-envelope"></i> cuong.lm@vinhlongedu.vn</li>
+              <li><i class="fas fa-user-clock"></i> Tiếp phụ huynh: Sáng T4 & T6</li>
+            </ul>
+            <a href="tel:0235123456" class="btn btn--outline-dark" style="width:100%; justify-content:center; padding:8px 0; font-size:.8rem;"><i class="fas fa-phone-alt"></i> Gọi điện văn phòng</a>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- SUCCESS POPUP -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-box">
+      <div class="success-icon"><i class="fas fa-check"></i></div>
+      <h4>Gửi Phản Hồi Thành Công!</h4>
+      <p>Chân thành cảm ơn những ý kiến đóng góp của bạn. Tin nhắn phản hồi đã được chuyển tiếp đến Ban giám hiệu nhà trường để xử lý kịp thời.</p>
+      <button class="btn btn--primary" style="width:100%;" id="successClose">Đóng lại</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer" style="padding:36px 0 0;">
+    <div class="container footer__grid" style="grid-template-columns:1.4fr 1fr 1fr;padding-bottom:28px;">
+      <div class="footer__col footer__col--brand">
+        <div class="footer-logo"><i class="fas fa-school"></i><div><strong>Tiểu học Mỹ Cẩm</strong><small>Xã Càng Long – Tỉnh Vĩnh Long</small></div></div>
+        <p>Nơi ươm mầm những ước mơ và nuôi dưỡng thế hệ tương lai của vùng đất Vĩnh Long.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Thông tin trường</h4>
+        <ul>
+          <li><i class="fas fa-map-marker-alt"></i> Xã Càng Long, Huyện Càng Long, Tỉnh Vĩnh Long</li>
+          <li><i class="fas fa-phone-alt"></i> (0235) 123 456</li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Liên kết nhanh</h4>
+        <ul>
+          <li><a href="../index.html">Trang chủ</a></li>
+          <li><a href="tin-tuc.html">Tin tức</a></li>
+          <li><a href="tuyen-sinh.html">Tuyển sinh</a></li>
+          <li><a href="thu-vien-anh.html">Thư viện ảnh</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">
+        <p>© 2025 Trường Tiểu học Mỹ Cẩm – Xã Càng Long, Tỉnh Vĩnh Long</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // Tab Purpose selection
+    const tabs = document.querySelectorAll('.purpose-tab');
+    let currentPurpose = 'Tuyển sinh';
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentPurpose = tab.dataset.purpose;
+      });
+    });
+
+    // Message length counter
+    const messageTextarea = document.getElementById('message');
+    const charCounter = document.getElementById('charCounter');
+
+    messageTextarea.addEventListener('input', function() {
+      const len = this.value.length;
+      charCounter.textContent = `${len}/500`;
+      if (len >= 450) {
+        charCounter.classList.add('counter-warn');
+      } else {
+        charCounter.classList.remove('counter-warn');
+      }
+    });
+
+    // Form submit handling
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Show success popup
+      document.getElementById('successOverlay').style.display = 'flex';
+    });
+
+    document.getElementById('successClose').addEventListener('click', () => {
+      document.getElementById('successOverlay').style.display = 'none';
+      document.getElementById('contactForm').reset();
+      charCounter.textContent = '0/500';
+    });
+  </script>
+</body>
+</html>

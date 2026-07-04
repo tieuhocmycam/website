@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tuyển Sinh Lớp 1 – Trường Tiểu học Mỹ Cẩm</title>
+  <meta name="description" content="Cổng tuyển sinh trực tuyến Trường Tiểu học Mỹ Cẩm, xã Càng Long, tỉnh Vĩnh Long. Đăng ký nhập học trực tuyến cho học sinh lớp 1." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, #1e8bc3 100%);
+      padding: 52px 0 40px; color: var(--white);
+    }
+    .page-hero .breadcrumb { display:flex; align-items:center; gap:8px; font-size:.82rem; color:rgba(255,255,255,.7); margin-bottom:14px; }
+    .page-hero .breadcrumb a { color:rgba(255,255,255,.7); } .page-hero .breadcrumb a:hover { color:var(--white); }
+    .page-hero .breadcrumb i { font-size:.65rem; }
+    .page-hero h1 { font-family:'Nunito',sans-serif; font-size:2.2rem; font-weight:800; margin-bottom:8px; }
+    .page-hero p { font-size:1rem; color:rgba(255,255,255,.85); }
+    .status-badge { display:inline-flex; align-items:center; gap:6px; background:var(--secondary); color:var(--white); padding:5px 14px; border-radius:50px; font-size:.8rem; font-weight:700; margin-top:12px; }
+
+    /* ── LAYOUT ── */
+    .tuyen-sinh-layout { display:grid; grid-template-columns:1.1fr 0.9fr; gap:40px; align-items:start; }
+
+    /* ── INFO SECTION ── */
+    .info-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:16px; margin-bottom:28px; }
+    .info-card {
+      background:var(--white); border-radius:14px; padding:20px; border:1px solid var(--border);
+      border-left:4px solid var(--primary); box-shadow:0 2px 8px rgba(0,0,0,.06); transition:.3s;
+    }
+    .info-card:hover { transform:translateY(-2px); box-shadow:var(--shadow); }
+    .info-card i { font-size:1.8rem; color:var(--secondary); margin-bottom:10px; display:block; }
+    .info-card h4 { font-family:'Nunito'; font-size:.95rem; font-weight:800; margin-bottom:6px; }
+    .info-card p { font-size:.85rem; color:var(--text-muted); line-height:1.5; }
+
+    /* ── TIMELINE STEPS ── */
+    .steps-card { background:var(--white); border-radius:14px; padding:24px 28px; border:1px solid var(--border); box-shadow:0 2px 8px rgba(0,0,0,.06); margin-bottom:28px; }
+    .steps-card h3 { font-family:'Nunito'; font-size:1.2rem; font-weight:800; margin-bottom:20px; }
+    .timeline-steps { position:relative; padding-left:32px; }
+    .timeline-steps::before { content:''; position:absolute; left:12px; top:0; bottom:0; width:2px; background:var(--primary-light); }
+    .step-item { position:relative; margin-bottom:20px; }
+    .step-item:last-child { margin-bottom:0; }
+    .step-num {
+      position:absolute; left:-32px; top:2px; width:22px; height:22px; border-radius:50%;
+      background:var(--primary); color:var(--white); font-size:.75rem; font-weight:700;
+      display:flex; align-items:center; justify-content:center; border:2px solid var(--white);
+    }
+    .step-item h5 { font-family:'Nunito'; font-size:.92rem; font-weight:800; margin-bottom:4px; }
+    .step-item p { font-size:.8rem; color:var(--text-muted); line-height:1.5; }
+
+    /* ── FORM SECTION ── */
+    .reg-form { background:var(--white); border-radius:18px; padding:32px 28px; border:1px solid var(--border); box-shadow:0 4px 20px rgba(0,0,0,.08); }
+    .reg-form h3 { font-family:'Nunito'; font-size:1.3rem; font-weight:800; margin-bottom:6px; }
+    .reg-form .form-sub { font-size:.85rem; color:var(--text-muted); margin-bottom:24px; }
+    .form-group { margin-bottom:18px; }
+    .form-group label { display:block; font-size:.83rem; font-weight:700; color:var(--text); margin-bottom:7px; }
+    .form-control {
+      width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px;
+      font-size:.9rem; font-family:'Inter'; color:var(--text); transition:.3s; background:var(--white);
+    }
+    .form-control:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(26,111,181,.12); }
+    .gender-group { display:flex; gap:20px; padding:6px 0; }
+    .gender-radio { display:flex; align-items:center; gap:8px; cursor:pointer; font-size:.9rem; }
+    .gender-radio input { accent-color:var(--primary); width:16px; height:16px; }
+    
+    /* ── REQUIRED DOCS ── */
+    .docs-section { margin-top:60px; }
+    .docs-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; }
+    .doc-card {
+      background:var(--white); border-radius:14px; padding:24px 20px; text-align:center;
+      border:2px dashed var(--border); transition:.3s;
+    }
+    .doc-card:hover { border-color:var(--primary); background:var(--primary-light); transform:translateY(-2px); }
+    .doc-card i { font-size:2.2rem; color:var(--primary); margin-bottom:14px; display:block; }
+    .doc-card h5 { font-family:'Nunito'; font-size:.92rem; font-weight:800; margin-bottom:6px; }
+    .doc-card p { font-size:.78rem; color:var(--text-muted); line-height:1.5; }
+
+    /* ── FAQ ── */
+    .faq-section { margin-top:60px; }
+    .faq-list { display:flex; flex-direction:column; gap:12px; }
+    .faq-item { background:var(--white); border-radius:12px; border:1px solid var(--border); overflow:hidden; }
+    .faq-question { padding:18px 24px; font-family:'Nunito'; font-weight:800; font-size:.95rem; display:flex; justify-content:space-between; align-items:center; cursor:pointer; transition:.3s; }
+    .faq-question:hover { background:var(--primary-light); color:var(--primary); }
+    .faq-question i { font-size:.8rem; transition:.3s; }
+    .faq-answer { padding:0 24px; max-height:0; overflow:hidden; transition:max-height .3s ease-out, padding .3s ease-out; font-size:.88rem; color:var(--text-muted); line-height:1.7; border-top:1px solid transparent; }
+    .faq-item.open .faq-question { color:var(--primary); background:var(--primary-light); }
+    .faq-item.open .faq-question i { transform:rotate(180deg); }
+    .faq-item.open .faq-answer { padding:18px 24px; max-height:200px; border-top-color:var(--border); }
+
+    /* ── CTA BANNER ── */
+    .cta-banner { background:linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); color:var(--white); border-radius:18px; padding:40px; text-align:center; margin-top:60px; }
+    .cta-banner h3 { font-family:'Nunito'; font-size:1.6rem; font-weight:800; margin-bottom:12px; }
+    .cta-banner p { font-size:.95rem; color:rgba(255,255,255,.9); margin-bottom:20px; }
+    .cta-phone { font-size:1.8rem; font-weight:900; color:var(--secondary); display:block; margin-bottom:4px; }
+
+    /* ── SUCCESS STATE ── */
+    .success-overlay {
+      display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:9999;
+      align-items:center; justify-content:center; padding:20px;
+    }
+    .success-box {
+      background:var(--white); border-radius:24px; padding:40px; max-width:400px; width:100%;
+      text-align:center; box-shadow:var(--shadow-lg); animation:scaleUp .3s ease forwards;
+    }
+    @keyframes scaleUp { from{transform:scale(0.8);opacity:0} to{transform:scale(1);opacity:1} }
+    .success-icon { width:72px; height:72px; border-radius:50%; background:var(--accent-light, #eafaf1); color:var(--accent); font-size:2.2rem; display:flex; align-items:center; justify-content:center; margin:0 auto 20px; }
+    .success-box h4 { font-family:'Nunito'; font-size:1.3rem; font-weight:800; margin-bottom:10px; }
+    .success-box p { font-size:.88rem; color:var(--text-muted); line-height:1.6; margin-bottom:24px; }
+
+    @media(max-width:1024px) { .tuyen-sinh-layout { grid-template-columns:1fr; } .docs-grid { grid-template-columns:repeat(2, 1fr); } }
+    @media(max-width:768px) { .page-hero h1 { font-size:1.7rem; } }
+    @media(max-width:480px) { .docs-grid { grid-template-columns:1fr; } .info-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="container top-bar__inner">
+      <div class="top-bar__left">
+        <span><i class="fas fa-phone-alt"></i> (0235) 123 456</span>
+        <span><i class="fas fa-envelope"></i> thmycam@vinhlongedu.vn</span>
+        <span><i class="fas fa-clock"></i> Thứ 2 – Thứ 6: 7:00 – 17:00</span>
+      </div>
+      <div class="top-bar__right">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="../index.html" class="header__logo">
+        <div class="logo-icon"><i class="fas fa-school"></i></div>
+        <div class="logo-text">
+          <span class="logo-title">Tiểu học Mỹ Cẩm</span>
+          <span class="logo-sub">Xã Càng Long · Tỉnh Vĩnh Long</span>
+        </div>
+      </a>
+      <div class="header__actions">
+        <a href="login.html" class="btn-login" id="loginBtn"><i class="fas fa-lock"></i> Đăng nhập</a>
+        <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container navbar__inner">
+      <ul class="nav-list" id="navList">
+        <li><a href="../index.html">Trang chủ</a></li>
+        <li class="has-dropdown"><a href="gioi-thieu.html">Giới thiệu <i class="fas fa-chevron-down"></i></a>
+          <ul class="dropdown">
+            <li><a href="gioi-thieu.html#lich-su"><i class="fas fa-landmark"></i> Lịch sử & Truyền thống</a></li>
+            <li><a href="gioi-thieu.html#ban-giam-hieu"><i class="fas fa-user-tie"></i> Ban giám hiệu</a></li>
+            <li><a href="gioi-thieu.html#doi-ngu"><i class="fas fa-chalkboard-teacher"></i> Đội ngũ giáo viên</a></li>
+            <li><a href="gioi-thieu.html#co-so-vat-chat"><i class="fas fa-building"></i> Cơ sở vật chất</a></li>
+          </ul>
+        </li>
+        <li><a href="tin-tuc.html">Tin tức & Sự kiện</a></li>
+        <li><a href="kho-tai-lieu.html">Kho Tài liệu</a></li>
+        <li><a href="tuyen-sinh.html" class="active">Tuyển sinh</a></li>
+        <li><a href="thu-vien-anh.html">Thư viện ảnh</a></li>
+        <li><a href="lien-he.html">Liên hệ</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="../index.html">Trang chủ</a><i class="fas fa-chevron-right"></i><span>Tuyển sinh</span>
+      </div>
+      <h1><i class="fas fa-graduation-cap"></i> Tuyển Sinh Lớp 1 Trực Tuyến</h1>
+      <p>Cổng đăng ký nhập học trực tuyến năm học 2025–2026 dành cho học sinh lớp 1</p>
+      <span class="status-badge"><i class="fas fa-check-circle"></i> Đang nhận hồ sơ tuyển sinh</span>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main class="section" style="background:var(--bg);">
+    <div class="container">
+      <div class="tuyen-sinh-layout">
+        
+        <!-- Cột trái: Thông tin tuyển sinh -->
+        <div>
+          <div class="info-grid">
+            <div class="info-card">
+              <i class="fas fa-users"></i>
+              <h4>Chỉ tiêu tuyển sinh</h4>
+              <p>200 học sinh mới (phân chia đều cho 5-6 lớp học chất lượng chuẩn).</p>
+            </div>
+            <div class="info-card">
+              <i class="fas fa-calendar-check"></i>
+              <h4>Thời gian nhận hồ sơ</h4>
+              <p>Từ 01/07/2025 đến hết ngày 31/07/2025 thông qua Cổng trực tuyến hoặc trực tiếp.</p>
+            </div>
+            <div class="info-card">
+              <i class="fas fa-child"></i>
+              <h4>Đối tượng tuyển sinh</h4>
+              <p>Trẻ em sinh năm 2019 (đầy đủ 6 tuổi tính theo quy định của Bộ Giáo dục & Đào tạo).</p>
+            </div>
+            <div class="info-card">
+              <i class="fas fa-map-marked-alt"></i>
+              <h4>Địa bàn xét tuyển</h4>
+              <p>Học sinh có hộ khẩu thường trú hoặc tạm trú tại địa bàn xã Càng Long.</p>
+            </div>
+          </div>
+
+          <div class="steps-card">
+            <h3>Các bước làm thủ tục nhập học</h3>
+            <div class="timeline-steps">
+              <div class="step-item">
+                <div class="step-num">1</div>
+                <h5>Đăng ký thông tin</h5>
+                <p>Điền đầy đủ thông tin học sinh và phụ huynh vào form trực tuyến bên phải và nộp đơn gửi về nhà trường.</p>
+              </div>
+              <div class="step-item">
+                <div class="step-num">2</div>
+                <h5>Nộp hồ sơ giấy & Kiểm tra đối chiếu</h5>
+                <p>Phụ huynh mang đầy đủ hồ sơ giấy tờ gốc tới văn phòng nhà trường để đối chiếu và đối soát thông tin.</p>
+              </div>
+              <div class="step-item">
+                <div class="step-num">3</div>
+                <h5>Thông báo kết quả xét tuyển</h5>
+                <p>Nhà trường gửi thông báo trúng tuyển thông qua tin nhắn điện thoại SMS, email và niêm yết tại trường.</p>
+              </div>
+              <div class="step-item">
+                <div class="step-num">4</div>
+                <h5>Tập trung học sinh & Nhận lớp</h5>
+                <p>Học sinh trúng tuyển tập trung tựu trường chuẩn bị cho năm học mới theo lịch của Sở GD&ĐT Vĩnh Long.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cột phải: Form trực tuyến -->
+        <div class="reg-form" id="regFormSection">
+          <h3>Đăng ký hồ sơ lớp 1 trực tuyến</h3>
+          <p class="form-sub">Vui lòng điền đúng thông tin chính xác theo giấy khai sinh của bé.</p>
+          
+          <form id="tuyenSinhForm">
+            <div class="form-group">
+              <label for="studentName">Họ và tên học sinh (chữ in hoa có dấu) *</label>
+              <input type="text" id="studentName" class="form-control" placeholder="Ví dụ: NGUYỄN VĂN A" required />
+            </div>
+
+            <div class="form-group">
+              <label for="studentDob">Ngày, tháng, năm sinh *</label>
+              <input type="date" id="studentDob" class="form-control" required />
+            </div>
+
+            <div class="form-group">
+              <label>Giới tính *</label>
+              <div class="gender-group">
+                <label class="gender-radio"><input type="radio" name="gender" value="Nam" checked /> Nam</label>
+                <label class="gender-radio"><input type="radio" name="gender" value="Nữ" /> Nữ</label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="studentAddress">Địa chỉ thường trú (hoặc tạm trú) *</label>
+              <input type="text" id="studentAddress" class="form-control" placeholder="Số nhà, ấp, khóm..." required />
+            </div>
+
+            <div class="form-group">
+              <label for="parentName">Họ và tên cha/mẹ/người giám hộ *</label>
+              <input type="text" id="parentName" class="form-control" placeholder="Họ và tên phụ huynh..." required />
+            </div>
+
+            <div class="form-group">
+              <label for="parentPhone">Số điện thoại liên hệ di động *</label>
+              <input type="tel" id="parentPhone" class="form-control" placeholder="Nhập số điện thoại liên hệ..." required />
+            </div>
+
+            <div class="form-group">
+              <label for="parentEmail">Địa chỉ Email (nếu có)</label>
+              <input type="email" id="parentEmail" class="form-control" placeholder="name@example.com" />
+            </div>
+
+            <div class="form-group" style="display:flex; align-items:flex-start; gap:8px;">
+              <input type="checkbox" id="agreeRules" style="accent-color:var(--primary); width:18px; height:18px; margin-top:2px;" required />
+              <label for="agreeRules" style="font-size:.8rem; color:var(--text-muted); font-weight:500; cursor:pointer;">Tôi cam đoan khai báo thông tin trung thực, đúng sự thật và tự chịu trách nhiệm về lời khai của mình.</label>
+            </div>
+
+            <button type="submit" class="btn btn--primary" style="width:100%; background:var(--secondary); justify-content:center; box-shadow:0 4px 14px rgba(245,166,35,.35);">
+              <i class="fas fa-paper-plane"></i> Gửi hồ sơ đăng ký
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Hồ sơ cần chuẩn bị -->
+      <section class="docs-section">
+        <div class="section-header">
+          <span class="section-tag">Thủ tục giấy</span>
+          <h2 class="section-title">Hồ Sơ Cần Chuẩn Bị</h2>
+          <p class="section-sub">Phụ huynh chuẩn bị các hồ sơ sau khi đối chiếu trực tiếp tại văn phòng trường</p>
+        </div>
+        <div class="docs-grid">
+          <div class="doc-card">
+            <i class="fas fa-file-invoice"></i>
+            <h5>Giấy khai sinh</h5>
+            <p>1 Bản sao hợp lệ từ sổ gốc (hoặc bản photo kèm bản chính đối chiếu).</p>
+          </div>
+          <div class="doc-card">
+            <i class="fas fa-home"></i>
+            <h5>Hộ khẩu / Tạm trú</h5>
+            <p>Bản photo Sổ hộ khẩu (hoặc Giấy tạm trú/Xác nhận cư trú CT07).</p>
+          </div>
+          <div class="doc-card">
+            <i class="fas fa-id-badge"></i>
+            <h5>Ảnh thẻ học sinh</h5>
+            <p>2 ảnh chân dung kích thước 3x4 (chụp trong vòng 6 tháng gần nhất).</p>
+          </div>
+          <div class="doc-card">
+            <i class="fas fa-clipboard-check"></i>
+            <h5>Đơn xin nhập học</h5>
+            <p>Bản giấy in từ hệ thống đăng ký trực tuyến hoặc phát trực tiếp.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section class="faq-section">
+        <div class="section-header">
+          <span class="section-tag">Giải đáp nhanh</span>
+          <h2 class="section-title">Câu Hỏi Thường Gặp</h2>
+          <p class="section-sub">Những thắc mắc phổ biến của phụ huynh về quá trình nhập học lớp 1</p>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-question">Tôi có thể đăng ký trực tuyến trước rồi nộp hồ sơ giấy sau không? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Có. Nhà trường khuyến khích phụ huynh đăng ký trực tuyến trước để rút ngắn thời gian làm việc. Sau khi gửi form đăng ký, phụ huynh chỉ cần mang giấy tờ gốc tới trường để đối chiếu thông tin theo lịch hẹn mà không cần khai báo lại.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">Nếu gia đình có tạm trú tại xã Càng Long thì có được xét tuyển không? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Học sinh có giấy xác nhận tạm trú hợp lệ của công an xã Càng Long cấp vẫn thuộc đối tượng xét tuyển của trường nếu chỉ tiêu tuyển sinh chưa vượt quá giới hạn cho phép.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">Thời gian nộp hồ sơ giấy đối chiếu trực tiếp bắt đầu khi nào? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Nhà trường tổ chức tiếp nhận hồ sơ giấy từ 7:30 đến 11:30 các buổi sáng từ Thứ 2 đến Thứ 6 hằng tuần trong suốt tháng 7 tại Văn phòng ban tuyển sinh nhà trường.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">Lớp 1 của trường học bán trú cả ngày hay học nửa buổi? <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">Nhà trường có tổ chức mô hình học bán trú 2 buổi/ngày kèm theo bữa trưa và nghỉ trưa tại bếp ăn bán trú chuẩn vệ sinh an toàn của trường. Phụ huynh có thể tự nguyện đăng ký khi nộp hồ sơ nhập học chính thức.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Liên hệ nhanh -->
+      <section class="cta-banner">
+        <h3>Cần hỗ trợ tư vấn tuyển sinh trực tiếp?</h3>
+        <p>Liên hệ bộ phận tuyển sinh Trường Tiểu học Mỹ Cẩm để được giải đáp thắc mắc và hướng dẫn chi tiết.</p>
+        <span class="cta-phone"><i class="fas fa-phone-alt"></i> (0235) 123 456</span>
+        <span>Email: thmycam@vinhlongedu.vn</span>
+      </section>
+    </div>
+  </main>
+
+  <!-- SUCCESS POPUP -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-box">
+      <div class="success-icon"><i class="fas fa-check"></i></div>
+      <h4>Gửi Hồ Sơ Thành Công!</h4>
+      <p>Thông tin đăng ký hồ sơ nhập học của bé đã được truyền tải thành công về cơ sở dữ liệu nhà trường. Bộ phận tuyển sinh sẽ liên hệ trực tiếp cho bạn qua số điện thoại đăng ký sớm nhất.</p>
+      <button class="btn btn--primary" style="width:100%;" id="successClose">Đóng lại</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer" style="padding:36px 0 0;">
+    <div class="container footer__grid" style="grid-template-columns:1.4fr 1fr 1fr;padding-bottom:28px;">
+      <div class="footer__col footer__col--brand">
+        <div class="footer-logo"><i class="fas fa-school"></i><div><strong>Tiểu học Mỹ Cẩm</strong><small>Xã Càng Long – Tỉnh Vĩnh Long</small></div></div>
+        <p>Nơi ươm mầm những ước mơ và nuôi dưỡng thế hệ tương lai của vùng đất Vĩnh Long.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Thông tin trường</h4>
+        <ul>
+          <li><i class="fas fa-map-marker-alt"></i> Xã Càng Long, Huyện Càng Long, Tỉnh Vĩnh Long</li>
+          <li><i class="fas fa-phone-alt"></i> (0235) 123 456</li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Liên kết nhanh</h4>
+        <ul>
+          <li><a href="../index.html">Trang chủ</a></li>
+          <li><a href="tin-tuc.html">Tin tức</a></li>
+          <li><a href="kho-tai-lieu.html">Tài liệu</a></li>
+          <li><a href="lien-he.html">Liên hệ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <p>© 2025 Trường Tiểu học Mỹ Cẩm – Xã Càng Long, Tỉnh Vĩnh Long</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // FAQ Accordion Toggle
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement;
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if(!isOpen) item.classList.add('open');
+      });
+    });
+
+    // Form Submit handling
+    document.getElementById('tuyenSinhForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Show success overlay
+      document.getElementById('successOverlay').style.display = 'flex';
+    });
+
+    document.getElementById('successClose').addEventListener('click', () => {
+      document.getElementById('successOverlay').style.display = 'none';
+      document.getElementById('tuyenSinhForm').reset();
+    });
+  </script>
+</body>
+</html>
